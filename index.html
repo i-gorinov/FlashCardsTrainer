@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcards</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <!-- Live status region announces progress and validation updates to assistive tech. -->
+      <h1>Flashcard Trainer</h1>
+      <div class="app-toolbar">
+        <p id="status" class="status" aria-live="polite">Upload a CSV file to begin.</p>
+        <button id="restartBtn" type="button" disabled>
+          <span class="restart-icon" aria-hidden="true">&#x21ba;</span>
+          <span>Restart</span>
+        </button>
+      </div>
+
+      <!-- Focusable flashcard surface used for click and keyboard flip interactions. -->
+      <section class="card-stage" aria-label="Flashcard display">
+        <div id="flashcard" class="flashcard is-disabled" role="button" tabindex="0" aria-label="Flashcard">
+          <div class="flashcard-inner">
+            <article class="flashcard-face flashcard-front" aria-label="Question side">
+              <h2>Question</h2>
+              <p id="questionText">No card loaded yet.</p>
+            </article>
+            <article class="flashcard-face flashcard-back" aria-label="Answer side">
+              <h2>Answer</h2>
+              <p id="answerText">Upload a file to see answers.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <p class="flip-hint">Click the card or press Space to flip.</p>
+
+      <!-- Primary navigation mirrors keyboard left/right actions. -->
+      <div class="primary-action">
+        <button id="previousBtn" type="button" disabled>Previous</button>
+        <button id="nextBtn" type="button" disabled>Next</button>
+      </div>
+
+      <!-- Session controls for data source, traversal mode, and restart. -->
+      <section class="settings-panel" aria-label="Flashcard controls">
+        <section class="control-group settings-tabs-panel" aria-label="Mode category and options">
+          <div class="mode-tabs" role="tablist" aria-label="Flashcard settings">
+            <button
+              id="setupTab"
+              class="mode-tab is-active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="setupPanel"
+              tabindex="0"
+            >
+              Setup
+            </button>
+            <button
+              id="practiceTab"
+              class="mode-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="practicePanel"
+              tabindex="-1"
+            >
+              Practice
+            </button>
+            <button
+              id="testTab"
+              class="mode-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="testPanel"
+              tabindex="-1"
+            >
+              Test
+            </button>
+          </div>
+
+          <div class="mode-content">
+            <div id="setupPanel" class="mode-panel setup-panel" role="tabpanel" aria-labelledby="setupTab">
+              <div class="upload-section">
+                <button id="uploadBtn" type="button" class="upload-btn">Upload CSV</button>
+                <input id="csvInput" class="visually-hidden-input" type="file" accept=".csv,text/csv" />
+                <p id="fileName" class="file-name" aria-live="polite">No file chosen</p>
+              </div>
+            </div>
+
+            <div id="practicePanel" class="mode-panel" role="tabpanel" aria-labelledby="practiceTab" hidden>
+              <p class="mode-panel-title">Study mode</p>
+              <label class="mode-option">
+                <input type="radio" name="modeChoice" value="sequential" checked />
+                <span>Sequential</span>
+              </label>
+              <label class="mode-option">
+                <input type="radio" name="modeChoice" value="randomRepeat" />
+                <span>Random (with repetition)</span>
+              </label>
+            </div>
+
+            <div id="testPanel" class="mode-panel" role="tabpanel" aria-labelledby="testTab" hidden>
+              <p class="mode-panel-title">Test mode</p>
+              <label class="mode-option">
+                <input type="radio" name="modeChoice" value="randomNoRepeat" />
+                <span>Random (no repetition)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
