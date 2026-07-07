@@ -245,8 +245,12 @@ button:disabled {
 }
 
 .card-stage {
+  /* Three-column layout: left nav, card, right nav. Keeps card centered. */
   display: grid;
-  place-items: center;
+  grid-template-columns: auto minmax(0, min(680px, 95vw)) auto;
+  align-items: center;
+  justify-content: center;
+  column-gap: 16px;
   margin-top: 4px;
 }
 
@@ -258,6 +262,8 @@ button:disabled {
   cursor: pointer;
   outline: none;
   transition: transform 180ms ease;
+  position: relative;
+  z-index: 1;
 }
 
 .flashcard.is-disabled {
@@ -345,18 +351,41 @@ button:disabled {
   }
 }
 
-#nextBtn {
-  width: 100%;
-  box-shadow: 0 10px 24px rgba(15, 118, 110, 0.2);
+.card-nav {
+  /* Icon-only vertical pill nav: modest width, tall clickable area. */
+  width: 52px;
+  height: min(260px, 80%);
+  padding: 0;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.35rem;
+  line-height: 1;
+  position: relative;
+  z-index: 3;
+  transition: background-color 0.18s ease, color 0.18s ease, opacity 0.18s ease;
 }
 
-#previousBtn {
-  width: 100%;
-  background: color-mix(in srgb, var(--accent) 78%, white);
+.card-nav:hover:not(:disabled),
+.card-nav:focus-visible {
+  background: color-mix(in srgb, var(--accent) 10%, white);
+  color: var(--accent-dark);
 }
 
-#previousBtn:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--accent-dark) 82%, white);
+/* Keep disabled styling shared for both nav controls. */
+.card-nav:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.card-nav:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 55%, white);
+  outline-offset: 2px;
 }
 
 .settings-panel {
@@ -392,12 +421,11 @@ button:focus-visible,
     padding: 18px;
   }
 
-  #nextBtn {
-    width: 100%;
-  }
-
-  .primary-action {
-    grid-template-columns: 1fr;
+  /* Reduce nav pill height a bit on tablet / small desktop. */
+  .card-nav {
+    width: 48px;
+    height: min(200px, 72%);
+    font-size: 1.15rem;
   }
 
   .flashcard {
@@ -418,5 +446,18 @@ button:focus-visible,
 
   .file-name {
     flex-basis: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  /* On narrow mobile, keep pills compact to avoid overlap with content. */
+  .card-stage {
+    column-gap: 10px;
+  }
+
+  .card-nav {
+    width: 44px;
+    height: min(140px, 60%);
+    font-size: 1rem;
   }
 }

@@ -20,6 +20,8 @@
 
       <!-- Focusable flashcard surface used for click and keyboard flip interactions. -->
       <section class="card-stage" aria-label="Flashcard display">
+        <button id="previousBtn" class="card-nav card-nav-prev" type="button" aria-label="Previous card" disabled>❮</button>
+
         <div id="flashcard" class="flashcard is-disabled" role="button" tabindex="0" aria-label="Flashcard">
           <div class="flashcard-inner">
             <article class="flashcard-face flashcard-front" aria-label="Question side">
@@ -32,15 +34,13 @@
             </article>
           </div>
         </div>
+
+        <button id="nextBtn" class="card-nav card-nav-next" type="button" aria-label="Next card" disabled>❯</button>
       </section>
 
       <p class="flip-hint">Click the card or press Space to flip.</p>
 
-      <!-- Primary navigation mirrors keyboard left/right actions. -->
-      <div class="primary-action">
-        <button id="previousBtn" type="button" disabled>Previous</button>
-        <button id="nextBtn" type="button" disabled>Next</button>
-      </div>
+      <!-- Primary navigation mirrors keyboard left/right actions. (moved into .card-stage) -->
 
       <!-- Session controls for data source, traversal mode, and restart. -->
       <section class="settings-panel" aria-label="Flashcard controls">
