@@ -172,6 +172,10 @@ function handleModeChange() {
 }
 
 function handleSetupTabSelect() {
+  if (state.activeTab === "setup") {
+    return;
+  }
+
   activateTab("setup");
 }
 
@@ -203,6 +207,10 @@ function handleSettingsTabKeydown(event) {
 }
 
 function handleStudyTabSelect() {
+  if (state.activeTab === "study") {
+    return;
+  }
+
   activateTab("study");
 
   if (state.cards.length === 0) {
@@ -218,6 +226,10 @@ function handleStudyTabSelect() {
 }
 
 function handleTestTabSelect() {
+  if (state.activeTab === "test") {
+    return;
+  }
+
   activateTab("test");
 
   if (state.cards.length === 0) {
