@@ -6,6 +6,10 @@ A lightweight, browser-based flashcard application that loads question-and-answe
 
 - Load flashcards from a CSV file
 - Interactive card flip animation
+- Progressive UI that reveals information only when relevant:
+  - Initial state shows "Upload a CSV file to begin." in the card
+  - After upload shows instructions to select Practice or Test
+  - During active session shows flashcard with question and answer headings
 - Side chevron navigation controls beside the flashcard for Previous/Next traversal
 - Three settings tabs in one unified panel:
   - **Setup**
@@ -64,7 +68,67 @@ The Settings panel uses three tabs:
 
 Switching the selected mode after loading a CSV restarts the current deck, preserving the same behavior as before.
 
+## Application States
+
+The application manages three distinct UI states to progressively reveal information:
+
+### Empty State (Initial)
+
+This is the default state when the application first loads.
+
+**Toolbar:** "Ready to load flashcards."
+
+**Card Display:** "Upload a CSV file to begin."
+
+**Characteristics:**
+- No Question or Answer headings visible
+- No flip instruction shown
+- Navigation buttons disabled
+- Restart button disabled
+
+### Ready State (After CSV Upload)
+
+The card display updates after successfully uploading a CSV file and before starting a session.
+
+**Toolbar:** "<N> cards loaded." (e.g., "3 cards loaded.")
+
+**Card Display:** "Select Practice or Test to begin"
+
+**Characteristics:**
+- No Question or Answer headings visible
+- No flip instruction shown
+- Navigation buttons disabled
+- Restart button disabled
+- Settings tabs (Practice/Test) become enabled
+
+### Active State (Session Running)
+
+This state is active while you are actively reviewing cards.
+
+**Toolbar:** Progress message (e.g., "Viewed: 1 | Unique: 1 / 150")
+
+**Card Display:**
+```
+Question
+<actual question text>
+```
+
+(Back side)
+```
+Answer
+<actual answer text>
+```
+
+**Characteristics:**
+- Question and Answer headings are visible
+- Flip instruction shown: "Click the card or press Space to flip."
+- Navigation buttons enabled based on traversal mode
+- Restart button enabled
+- Card is interactive and clickable
+
 ## Study Modes
+
+Switching the selected mode after loading a CSV restarts the current deck, preserving the same behavior as before.
 
 ### Sequential
 

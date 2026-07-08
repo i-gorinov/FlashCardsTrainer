@@ -4,6 +4,12 @@ const Mode = {
   RANDOM_REPEAT: "randomRepeat",
 };
 
+const CardState = {
+  EMPTY: "empty",
+  READY: "ready",
+  ACTIVE: "active",
+};
+
 // Runtime state for current dataset, traversal strategy, and active card pointer.
 const state = {
   cards: [],
@@ -13,6 +19,7 @@ const state = {
   cursor: 0,
   currentCardIndex: -1,
   sessionStarted: false,
+  cardState: CardState.EMPTY,
 };
 
 // Session progress is separate from dataset position.
@@ -40,6 +47,9 @@ const elements = {
   flashcard: document.getElementById("flashcard"),
   questionText: document.getElementById("questionText"),
   answerText: document.getElementById("answerText"),
+  questionHeading: document.querySelector(".flashcard-front h2"),
+  answerHeading: document.querySelector(".flashcard-back h2"),
+  flipHint: document.querySelector(".flip-hint"),
 };
 
 function initializeApp() {
@@ -73,6 +83,9 @@ function initializeApp() {
   state.mode = getSelectedModeFromRadios();
   setModeTabsEnabled(false);
   activateTab(state.activeTab);
+  
+  // Initialize to empty state with proper content and visibility
+  resetToEmptyState();
 }
 
 async function handleFileUpload(event) {
@@ -105,7 +118,7 @@ async function handleFileUpload(event) {
     setModeTabsEnabled(true);
     activateTab("setup");
     setReadyState();
-    updateStatus(`${parsedCards.length} cards loaded. Select Practice or Test to begin.`);
+    updateStatus(`${parsedCards.length} cards loaded.`);
   } catch (error) {
     resetToEmptyState();
     updateStatus(error.message || "Could not read the selected file.");
@@ -341,6 +354,7 @@ function renderCurrentCard() {
   elements.flashcard.classList.remove("is-flipped");
   elements.flashcard.classList.remove("is-disabled");
   elements.flashcard.setAttribute("aria-disabled", "false");
+  setCardState(CardState.ACTIVE);
 
   const progressText = formatProgressText();
   updateStatus(progressText);
@@ -399,6 +413,23 @@ function updateNavigationControls(enabled) {
   elements.nextBtn.disabled = false;
 }
 
+function setCardState(cardState) {
+  state.cardState = cardState;
+  
+  // Hide/show headings and flip hint based on card state
+  const isActive = cardState === CardState.ACTIVE;
+  
+  if (elements.questionHeading) {
+    elements.questionHeading.hidden = !isActive;
+  }
+  if (elements.answerHeading) {
+    elements.answerHeading.hidden = !isActive;
+  }
+  if (elements.flipHint) {
+    elements.flipHint.hidden = !isActive;
+  }
+}
+
 function handleGlobalKeyboardNavigation(event) {
   // Ignore shortcuts while the user is interacting with form controls.
   if (
@@ -450,17 +481,19 @@ function resetToEmptyState() {
   viewedCount = 0;
   uniqueSeen.clear();
 
-  elements.questionText.textContent = "No card loaded yet.";
-  elements.answerText.textContent = "Upload a file to see answers.";
+  elements.questionText.textContent = "Upload a CSV file to begin.";
+  elements.answerText.textContent = "Upload a CSV file to begin.";
   elements.flashcard.classList.remove("is-flipped");
   setControlsEnabled(false);
+  setCardState(CardState.EMPTY);
 }
 
 function setReadyState() {
-  elements.questionText.textContent = "Ready to begin";
-  elements.answerText.textContent = "Select Practice or Test to begin.";
+  elements.questionText.textContent = "Select Practice or Test to begin";
+  elements.answerText.textContent = "Select Practice or Test to begin";
   elements.flashcard.classList.remove("is-flipped");
   setControlsEnabled(false);
+  setCardState(CardState.READY);
 }
 
 function setModeTabsEnabled(enabled) {
