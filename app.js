@@ -519,16 +519,19 @@ function syncAnswerStatusIndicator() {
     indicator.hidden = !shouldShowIndicator;
 
     if (!shouldShowIndicator) {
-      indicator.classList.remove("is-unanswered", "is-correct", "is-incorrect", "is-animating");
+      indicator.classList.remove("is-unanswered", "is-correct", "is-incorrect", "is-animating", "is-readonly");
       return;
     }
 
     const currentCardIndex = state.currentCardIndex;
     const status = state.answerStatuses[currentCardIndex] || AnswerStatus.UNANSWERED;
     const statusMeta = getAnswerStatusMeta(status);
+    const isInteractive = indicator.dataset.side === "back";
 
-    indicator.classList.remove("is-unanswered", "is-correct", "is-incorrect", "is-animating");
+    indicator.classList.remove("is-unanswered", "is-correct", "is-incorrect", "is-animating", "is-readonly");
     indicator.classList.add(`is-${status}`);
+    indicator.classList.toggle("is-readonly", !isInteractive);
+    indicator.tabIndex = isInteractive ? 0 : -1;
     indicator.setAttribute("aria-label", `Answer status: ${statusMeta.label}`);
     indicator.title = `Answer status: ${statusMeta.label}`;
     indicator.querySelector(".answer-status-symbol").textContent = statusMeta.symbol;
@@ -547,6 +550,11 @@ function handleAnswerStatusIndicatorClick(event) {
   event.preventDefault();
   event.stopPropagation();
 
+  const indicator = event.currentTarget;
+  if (indicator.dataset.side !== "back") {
+    return;
+  }
+
   if (state.cards.length === 0 || state.mode !== Mode.RANDOM_NO_REPEAT || state.currentCardIndex < 0) {
     return;
   }
@@ -560,6 +568,13 @@ function handleAnswerStatusIndicatorClick(event) {
 }
 
 function handleAnswerStatusIndicatorKeydown(event) {
+  const indicator = event.currentTarget;
+  if (indicator.dataset.side !== "back") {
+    event.preventDefault();
+    event.stopPropagation();
+    return;
+  }
+
   if (event.key === " " || event.key === "Spacebar" || event.key === "Enter") {
     event.preventDefault();
     event.stopPropagation();
