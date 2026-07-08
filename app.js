@@ -12,6 +12,7 @@ const state = {
   order: [],
   cursor: 0,
   currentCardIndex: -1,
+  sessionStarted: false,
 };
 
 // Session progress is separate from dataset position.
@@ -70,6 +71,7 @@ function initializeApp() {
   });
 
   state.mode = getSelectedModeFromRadios();
+  setModeTabsEnabled(false);
   activateTab(state.activeTab);
 }
 
@@ -94,7 +96,16 @@ async function handleFileUpload(event) {
     }
 
     state.cards = parsedCards;
-    restartDeck();
+    state.sessionStarted = false;
+    viewedCount = 0;
+    uniqueSeen.clear();
+    state.order = [];
+    state.cursor = 0;
+    state.currentCardIndex = -1;
+    setModeTabsEnabled(true);
+    activateTab("setup");
+    setReadyState();
+    updateStatus(`${parsedCards.length} cards loaded. Select Practice or Test to begin.`);
   } catch (error) {
     resetToEmptyState();
     updateStatus(error.message || "Could not read the selected file.");
@@ -110,7 +121,7 @@ function handleModeChange() {
   state.mode = selectedMode;
   syncModeTabUi();
 
-  if (state.cards.length === 0) {
+  if (state.cards.length === 0 || !state.sessionStarted) {
     return;
   }
 
@@ -150,20 +161,33 @@ function handleSettingsTabKeydown(event) {
 }
 
 function handlePracticeTabSelect() {
-  const previousMode = state.mode;
   activateTab("practice");
 
-  if (isPracticeMode(previousMode)) {
-    setModeRadio(previousMode);
+  if (state.cards.length === 0) {
     return;
   }
 
-  applyMode(Mode.SEQUENTIAL);
+  if (state.mode !== Mode.SEQUENTIAL || !state.sessionStarted) {
+    applyMode(Mode.SEQUENTIAL, true);
+    return;
+  }
+
+  setModeRadio(state.mode);
 }
 
 function handleTestTabSelect() {
   activateTab("test");
-  applyMode(Mode.RANDOM_NO_REPEAT);
+
+  if (state.cards.length === 0) {
+    return;
+  }
+
+  if (state.mode !== Mode.RANDOM_NO_REPEAT || !state.sessionStarted) {
+    applyMode(Mode.RANDOM_NO_REPEAT, true);
+    return;
+  }
+
+  setModeRadio(state.mode);
 }
 
 function syncModeTabUi() {
@@ -225,8 +249,8 @@ function setModeRadio(mode) {
   });
 }
 
-function applyMode(mode) {
-  if (state.mode === mode) {
+function applyMode(mode, shouldStartSession = false) {
+  if (state.mode === mode && !shouldStartSession) {
     return;
   }
 
@@ -234,7 +258,7 @@ function applyMode(mode) {
   setModeRadio(mode);
   syncModeTabUi();
 
-  if (state.cards.length > 0) {
+  if (state.cards.length > 0 && (state.sessionStarted || shouldStartSession)) {
     restartDeck();
   }
 }
@@ -243,6 +267,8 @@ function restartDeck() {
   if (state.cards.length === 0) {
     return;
   }
+
+  state.sessionStarted = true;
 
   viewedCount = 0;
   uniqueSeen.clear();
@@ -333,7 +359,7 @@ function formatProgressText() {
 }
 
 function toggleCardFlip() {
-  if (state.cards.length === 0) {
+  if (state.cards.length === 0 || elements.flashcard.getAttribute("aria-disabled") === "true") {
     return;
   }
 
@@ -345,6 +371,7 @@ function setControlsEnabled(enabled) {
   elements.restartBtn.disabled = !enabled;
   elements.flashcard.classList.toggle("is-disabled", !enabled);
   elements.flashcard.setAttribute("aria-disabled", String(!enabled));
+  elements.flashcard.tabIndex = enabled ? 0 : -1;
   updateNavigationControls(enabled);
 }
 
@@ -417,15 +444,30 @@ function resetToEmptyState() {
   state.cursor = 0;
   state.currentCardIndex = -1;
   state.mode = getSelectedModeFromRadios();
+  state.sessionStarted = false;
   syncModeTabUi();
+  setModeTabsEnabled(false);
   viewedCount = 0;
   uniqueSeen.clear();
 
   elements.questionText.textContent = "No card loaded yet.";
   elements.answerText.textContent = "Upload a file to see answers.";
   elements.flashcard.classList.remove("is-flipped");
-  elements.flashcard.setAttribute("aria-disabled", "true");
   setControlsEnabled(false);
+}
+
+function setReadyState() {
+  elements.questionText.textContent = "Ready to begin";
+  elements.answerText.textContent = "Select Practice or Test to begin.";
+  elements.flashcard.classList.remove("is-flipped");
+  setControlsEnabled(false);
+}
+
+function setModeTabsEnabled(enabled) {
+  [elements.practiceTab, elements.testTab].forEach((tab) => {
+    tab.disabled = !enabled;
+    tab.setAttribute("aria-disabled", String(!enabled));
+  });
 }
 
 function updateStatus(message) {
