@@ -1,246 +1,133 @@
 # Flashcard Trainer
 
-A lightweight, browser-based flashcard application that loads question-and-answer pairs from a CSV file. The application runs entirely in the browser with no installation, backend, or external dependencies required.
+Flashcard Trainer is a lightweight, browser-based study app for reviewing question-and-answer pairs from a CSV file. It runs entirely client-side, requires no build step, and uses plain HTML, CSS, and JavaScript.
 
 ## Features
 
-- Load flashcards from a CSV file
-- Interactive card flip animation
-- Progressive UI that reveals information only when relevant:
-  - Initial state shows "Upload a CSV file to begin." in the card
-  - After upload shows instructions to select Study or Test
-  - During active session shows flashcard with question and answer headings
-- Side chevron navigation controls beside the flashcard for Previous/Next traversal
-- Three settings tabs in one unified panel:
-  - **Setup**
-    - Upload CSV
-    - Current file display
-  - **Study**
-    - Sequential
-    - Random (with repetition)
-  - **Test**
-    - Random (no repetition)
-- Progress tracking
-- Test mode answer marking with per-card status tracking
-- Test mode navigation filters for hiding Correct, Incorrect, or No Mark cards while browsing with Previous/Next
-- Responsive design for desktop and mobile
-- Client-side only — no data leaves your browser
+- Upload flashcards from a CSV file
+- Flip cards by clicking them
+- Navigate between cards with Previous and Next controls
+- Track progress during a session
+- Work as a static website with no backend or external dependencies
+- Study in two modes:
+  - Sequential
+  - Random (with repetition)
+- Test your knowledge in Random (no repetition) mode
+  - Mark answers as Correct, Incorrect, or Unanswered in Test mode
+  - Filter test navigation by answer status using the Hide category controls
 
-## Getting Started
+
+## Getting started
 
 1. Download or clone this repository.
-2. Open `index.html` in a modern web browser.
-3. In the **Setup** tab, upload a CSV file containing your flashcards.
-4. Choose **Study** or **Test**, then begin reviewing cards.
+2. Open index.html in a modern web browser, or serve the folder with any simple static server.
+3. In the Setup tab, upload a CSV file containing your flashcards.
+4. Choose Study or Test, then begin reviewing cards.
 
-## CSV Format
+## CSV format
 
-The CSV file must contain the following header row:
+The CSV parser expects a header row followed by one or more data rows.
 
-Question,Answer
+Required columns:
+- Question
+- Answer
+Optional columns:
+- Topic
 
 Example:
 
-Question,Answer
-"What is HTTP?","Hypertext Transfer Protocol"
-"What is SQL?","Structured Query Language"
+```csv
+Topic,Question,Answer
+"Internet","What is HTTP?","Hypertext Transfer Protocol"
+"Databases","What is SQL?","Structured Query Language"
+```
 
-### Notes
-
-- Header names must be `Question` and `Answer`.
+Notes:
+- Column names are matched case-insensitively, so Question/Answer and question/answer both work.
 - Quoted fields are supported.
 - Commas inside quoted fields are supported.
 - Blank rows are ignored.
-- Rows missing a question or answer are skipped.
+- Rows with an empty question or answer are skipped.
 
-## Mode Categories
+## Interface overview
 
-The Settings panel uses three tabs:
+The app uses three tabs in the settings area:
 
-- **Setup**
-  - Upload CSV
-  - View currently selected file name
-
-- **Study**
+- Setup
+  - Upload a CSV file
+  - View the currently selected filename
+- Study
   - Sequential
   - Random (with repetition)
-- **Test**
+- Test
   - Random (no repetition)
+  - Hide Correct, Incorrect, or No Mark cards while navigating
 
-Switching the selected mode after loading a CSV resets the current deck, preserving the same behavior as before.
+### App states
 
-## Application States
+- Empty state: the app starts with a prompt to upload a CSV file.
+- Ready state: after a valid file is loaded, the app shows a prompt to start Study or Test.
+- Active state: the current card is shown, and navigation and reset controls become available.
 
-The application manages three distinct UI states to progressively reveal information:
-
-### Empty State (Initial)
-
-This is the default state when the application first loads.
-
-**Toolbar:** "Ready to load flashcards."
-
-**Card Display:** "Upload a CSV file to begin."
-
-**Characteristics:**
-- No Question or Answer headings visible
-- No flip instruction shown
-- Navigation buttons disabled
-- Reset button disabled
-
-### Ready State (After CSV Upload)
-
-The card display updates after successfully uploading a CSV file and before starting a session.
-
-**Toolbar:** "<N> cards loaded." (e.g., "3 cards loaded.")
-
-**Card Display:** "Select Study or Test to begin"
-
-**Characteristics:**
-- No Question or Answer headings visible
-- No flip instruction shown
-- Navigation buttons disabled
-- Reset button disabled
-- Settings tabs (Study/Test) become enabled
-
-### Active State (Session Running)
-
-This state is active while you are actively reviewing cards.
-
-**Toolbar:** Progress message (e.g., "Viewed: 1 | Unique: 1 / 150")
-
-**Card Display:**
-```
-Question
-<actual question text>
-```
-
-(Back side)
-```
-Answer
-<actual answer text>
-```
-
-**Characteristics:**
-- Question and Answer headings are visible
-- Flip instruction shown: "Click the card or press Space to flip."
-- Navigation buttons enabled based on traversal mode
-- Reset button enabled
-- Card is interactive and clickable
-
-## Study Modes
-
-Switching the selected mode after loading a CSV resets the current deck, preserving the same behavior as before.
+## Modes
 
 ### Sequential
+- Cards appear in the order they are listed in the CSV file.
+- Previous and Next navigation are both available.
 
-Cards are displayed in the order they appear in the CSV file.
+### Random (with repetition)
+- Each new card is chosen randomly.
+- Cards can appear more than once in a session.
 
-- Supports both **Next** and **Previous** navigation.
-- Progress tracks:
-  - Total card views
-  - Unique cards encountered
+### Random (no repetition)
+- Each card appears once per session.
+- Navigation respects the selected Hide category filters.
+- The status line shows question position, correct count, incorrect count, and score.
 
-### Random (No Repetition)
+## Progress and answer tracking
 
-Cards are shown in a random order without repeats.
+The status line updates based on the selected mode:
 
-- Each card is shown exactly once per session.
-- Previous navigation is disabled unless the navigation filter is used to skip hidden categories.
-- Test mode includes compact navigation filters that let you hide Correct, Incorrect, or No Mark cards so Previous/Next only move through the remaining categories.
+- Study mode shows viewed count, unique cards seen, and deck size.
+- Test mode shows question position, correct count, incorrect count, and score.
 
-### Random (With Repetition)
+In Test mode, each card displays a compact status marker in the top-right corner. The marker cycles through:
+- Unanswered
+- Correct
+- Incorrect
 
-Each new card is selected randomly.
+The marker is shown on both sides of the card and remains attached to the card while you navigate.
 
-- Cards may appear more than once.
-- Progress tracks:
-  - Total card views
-  - Unique cards encountered
+## Project structure
 
-## Controls
-
-### Mouse
-
-- Click the card to flip between question and answer.
-- Use the left/right chevron buttons beside the card to navigate.
-
-## Progress Tracking
-
-Progress display is mode-dependent:
-
-- **Viewed** – Total number of times cards have been displayed.
-- **Unique** – Number of distinct cards seen during the current session.
-- **Deck** – Total cards in the deck (shown in Test mode).
-
-In Test mode, the status line also reports answer progress:
-
-- **Question X/Y** – Current position in the test order.
-- **Correct** – Number of cards marked as correct.
-- **Incorrect** – Number of cards marked as incorrect.
-- **Score** – Percentage of total cards that were correct, treating unmarked cards as 0.
-
-Example:
-
-Study / Random (with repetition):
-
-Viewed: 15 | Unique: 10 / 25
-
-Test / Random (no repetition):
-
-Question 8/25 | Correct: 5 | Incorrect: 2 | Score: 71%
-
-When no cards have been marked yet, the Test status line shows:
-
-Question X/Y | Correct: 0 | Incorrect: 0 | Score: --
-
-This allows revisited cards to be distinguished from genuinely new cards in Study, while Test shows progress against total deck size and answer accuracy.
-
-## Test Mode Answer Marking
-
-In Test mode, each card includes a compact status indicator in the top-right corner of the flashcard. Clicking the indicator cycles through these states:
-
-- **○** – Unanswered
-- **✓** – Correct
-- **✗** – Incorrect
-
-The indicator is rendered on both sides of the card, flips with the card as part of the existing 3D animation, remains persistent while navigating between cards, and does not flip the card or trigger navigation when clicked.
-
-## Project Structure
-
+```text
 .  
+├── app.js  
 ├── index.html  
 ├── styles.css  
-├── app.js  
+├── js/  
+│   ├── constants.js  
+│   ├── csvParser.js  
+│   ├── dom.js  
+│   ├── main.js  
+│   ├── navigation.js  
+│   ├── state.js  
+│   └── ui.js  
 └── README.md  
+```
 
-### File Overview
+### File overview
 
-- **index.html** – Application layout and user interface
-- **styles.css** – Styling, responsive layout, and card animations
-- **app.js** – CSV parsing, navigation logic, progress tracking, and application behaviour
-
-## Design Goals
-
-This project is intentionally:
-
-- Simple and easy to understand
-- Dependency-free
-- Fully client-side
-- Easy to host as a static website
-- Suitable for studying any topic that can be represented as question-and-answer pairs
-
-## Future Enhancements
-
-Potential ideas for future development:
-
-- Deck import/export
-- Local storage persistence
-- Card categories and tags
-- Difficulty ratings
-- Search and filtering
-- Spaced repetition mode
-- Statistics dashboard
-- Dark mode
+- app.js — application bootstrap entry point
+- index.html — app structure and UI markup
+- styles.css — visual styling, layout, and card animation
+- js/constants.js — shared constants and enums
+- js/state.js — application state and progress helpers
+- js/dom.js — DOM element lookup and wiring helpers
+- js/csvParser.js — CSV parsing and validation
+- js/navigation.js — traversal and navigation logic
+- js/ui.js — UI rendering and interaction handlers
+- js/main.js — main app initialization and behavior orchestration
 
 ## License
 
