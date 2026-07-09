@@ -144,7 +144,34 @@
           </div>
         </section>
       </section>
+
+      <footer class="app-footer">
+        <span class="copyright">
+          © 2026 Igor Gorinov
+        </span>
+
+        <a id="disclaimerLink" class="footer-link" href="disclaimer.html">
+          Disclaimer
+        </a>
+      </footer>  
+    
     </main>
+
+    <dialog id="disclaimerDialog" class="disclaimer-dialog" aria-labelledby="disclaimerDialogTitle">
+      <div class="disclaimer-dialog-header">
+        <h2 id="disclaimerDialogTitle">Disclaimer</h2>
+
+        <button id="closeDisclaimerBtn" type="button" class="dialog-close-btn" aria-label="Close disclaimer">
+          ×
+        </button>
+      </div>
+
+      <iframe
+        class="disclaimer-frame"
+        src="disclaimer.html"
+        title="Disclaimer content"
+      ></iframe>
+    </dialog>
 
     <script defer src="js/constants.js"></script>
     <script defer src="js/state.js"></script>

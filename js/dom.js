@@ -44,5 +44,8 @@ function getElements() {
     hideCorrectCheckbox: requiredElement("#hideCorrectCheckbox"),
     hideIncorrectCheckbox: requiredElement("#hideIncorrectCheckbox"),
     hideNoMarkCheckbox: requiredElement("#hideNoMarkCheckbox"),
+    disclaimerLink: requiredElement("#disclaimerLink"),
+    disclaimerDialog: requiredElement("#disclaimerDialog"),
+    closeDisclaimerBtn: requiredElement("#closeDisclaimerBtn"),
   };
 }

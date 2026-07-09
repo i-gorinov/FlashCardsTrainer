@@ -27,6 +27,9 @@ function wireEvents() {
   getNavigationFilterCheckboxes().forEach((checkbox) => {
     checkbox.addEventListener("change", handleNavigationFilterChange);
   });
+  elements.disclaimerLink.addEventListener("click", handleDisclaimerLinkClick);
+  elements.closeDisclaimerBtn.addEventListener("click", closeDisclaimer);
+  elements.disclaimerDialog.addEventListener("click", handleDisclaimerBackdropClick);
 }
 
 async function handleFileUpload(event) {
@@ -464,4 +467,23 @@ function readFileAsText(file) {
     reader.onerror = () => reject(new Error("Failed to read the selected file."));
     reader.readAsText(file);
   });
+}
+
+function handleDisclaimerLinkClick(event) {
+  if (!elements.disclaimerDialog.showModal) {
+    return;
+  }
+
+  event.preventDefault();
+  elements.disclaimerDialog.showModal();
+}
+
+function closeDisclaimer() {
+  elements.disclaimerDialog.close();
+}
+
+function handleDisclaimerBackdropClick(event) {
+  if (event.target === elements.disclaimerDialog) {
+    closeDisclaimer();
+  }
 }
