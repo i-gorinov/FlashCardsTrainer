@@ -41,12 +41,23 @@ h1 {
   letter-spacing: 0.4px;
 }
 
-.app-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
+.session-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 12px 16px;
+
+    background: color-mix(
+        in srgb,
+        var(--accent) 6%,
+        white
+    );
+
+    border: 1px solid rgba(15, 23, 42, 0.08);
+
+    border-radius: 12px;
 }
 
 .control-group {
@@ -128,22 +139,18 @@ button:disabled {
 }
 
 #resetBtn {
-  width: auto;
-  min-width: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--accent);
-  font-size: 0.95rem;
-  font-weight: 550;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  justify-content: flex-end;
-  cursor: pointer;
-  text-decoration: none;
-  box-shadow: none;
+    background: transparent;
+    border: 1px solid rgba(15, 23, 42, 0.15);
+
+    padding: 6px 12px;
+
+    border-radius: 8px;
+
+    color: var(--accent);
+
+    width: auto;
 }
+
 
 #resetBtn:hover:not(:disabled) {
   background: transparent;
