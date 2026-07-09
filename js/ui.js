@@ -359,7 +359,6 @@ function setCardState(cardState) {
   const isActive = cardState === CardState.ACTIVE;
   elements.questionHeading.hidden = !isActive;
   elements.answerHeading.hidden = !isActive;
-  elements.flipHint.hidden = !isActive;
 }
 
 function resetToEmptyState() {

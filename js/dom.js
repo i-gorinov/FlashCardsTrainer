@@ -40,7 +40,6 @@ function getElements() {
     answerText: requiredElement("#answerText"),
     questionHeading: requiredElement(".flashcard-front h2"),
     answerHeading: requiredElement(".flashcard-back h2"),
-    flipHint: requiredElement(".flip-hint"),
     hideCorrectCheckbox: requiredElement("#hideCorrectCheckbox"),
     hideIncorrectCheckbox: requiredElement("#hideIncorrectCheckbox"),
     hideNoMarkCheckbox: requiredElement("#hideNoMarkCheckbox"),
