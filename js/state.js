@@ -17,7 +17,7 @@ function createInitialState() {
     },
     progress: {
       viewedCount: 0,
-      uniqueSeen: new Set(),
+      seenCards: new Set(),
     },
   };
 }
@@ -32,7 +32,7 @@ function resetCoreState() {
 
 function resetProgress() {
   state.progress.viewedCount = 0;
-  state.progress.uniqueSeen.clear();
+  state.progress.seenCards.clear();
 }
 
 function resetNavigationFilters() {
@@ -69,6 +69,10 @@ function resetAllState(selectedMode = Mode.SEQUENTIAL) {
 }
 
 function markCardViewed(cardIndex) {
+  if (state.progress.seenCards.has(cardIndex)) {
+    return;
+  }
+
+  state.progress.seenCards.add(cardIndex);
   state.progress.viewedCount += 1;
-  state.progress.uniqueSeen.add(cardIndex);
 }
