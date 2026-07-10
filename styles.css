@@ -41,6 +41,10 @@ h1 {
   letter-spacing: 0.4px;
 }
 
+.is-pending-render {
+    visibility: hidden;
+}
+
 .session-bar {
     display: flex;
     align-items: center;

@@ -11,7 +11,7 @@
       <h1>Flashcard Trainer</h1>
 
       <div class="session-bar">
-        <p id="status" class="status" aria-live="polite">Ready to load flashcards.</p>
+        <p id="status" class="status" aria-live="polite"></p>
         <button id="resetBtn" type="button" disabled>
           <span class="reset-icon" aria-hidden="true">&#x21ba;</span>
           <span>Reset</span>
@@ -33,8 +33,8 @@
               >
                 <span class="answer-status-symbol" aria-hidden="true">○</span>
               </button>
-              <h2>Question</h2>
-              <p id="questionText">No card loaded yet.</p>
+              <h2 hidden>Question</h2>
+              <p id="questionText" class="is-pending-render"></p>
             </article>
 
             <article class="flashcard-face flashcard-back" aria-label="Answer side">
@@ -48,8 +48,8 @@
               >
                 <span class="answer-status-symbol" aria-hidden="true">○</span>
               </button>
-              <h2>Answer</h2>
-              <p id="answerText">Upload a file to see answers.</p>
+              <h2 hidden>Answer</h2>
+              <p id="answerText" class="is-pending-render"></p>
             </article>
           </div>
         </div>

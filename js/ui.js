@@ -8,6 +8,7 @@ function initializeApp() {
   setModeTabsEnabled(false);
   activateTab(state.activeTab);
   resetToEmptyState();
+  revealRenderedText();
 }
 
 function wireEvents() {
@@ -487,4 +488,10 @@ function handleDisclaimerBackdropClick(event) {
   if (event.target === elements.disclaimerDialog) {
     closeDisclaimer();
   }
+}
+
+function revealRenderedText() {
+  elements.status.classList.remove("is-pending-render");
+  elements.questionText.classList.remove("is-pending-render");
+  elements.answerText.classList.remove("is-pending-render");
 }
