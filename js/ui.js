@@ -359,6 +359,7 @@ function setCardState(cardState) {
   const isActive = cardState === CardState.ACTIVE;
   elements.questionHeading.hidden = !isActive;
   elements.answerHeading.hidden = !isActive;
+  elements.resetBtn.hidden = !isActive;
 }
 
 function resetToEmptyState() {
@@ -372,6 +373,7 @@ function resetToEmptyState() {
   setControlsEnabled(false);
   setCardState(CardState.EMPTY);
   syncAnswerStatusIndicator();
+  updateStatus(EMPTY_STATE_MOTTO);
 }
 
 function setReadyState() {

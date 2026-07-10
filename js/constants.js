@@ -16,6 +16,8 @@ const CardState = Object.freeze({
   ACTIVE: "active",
 });
 
+const EMPTY_STATE_MOTTO = "Learn. Practice. Remember.";
+
 const AnswerStatus = Object.freeze({
   UNANSWERED: "unanswered",
   CORRECT: "correct",
