@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="80 40 340 430">
+    <!-- Shadow -->
+    <rect x="105" y="65"
+          width="320"
+          height="410"
+          rx="28"
+          fill="#c7dddd"/>
+
+    <!-- Card -->
+    <rect x="85" y="45"
+          width="320"
+          height="410"
+          rx="28"
+          fill="white"
+          stroke="#00796b"
+          stroke-width="10"/>
+
+    <!-- Check circle -->
+    <circle cx="335" cy="105"
+            r="40"
+            fill="white"
+            stroke="#00796b"
+            stroke-width="10"/>
+
+    <!-- Check mark -->
+    <path d="M315 105 L330 120 L355 95"
+          fill="none"
+          stroke="#00796b"
+          stroke-width="10"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+
+    <!-- Letter Q -->
+    <circle cx="240"
+            cy="250"
+            r="70"
+            fill="none"
+            stroke="#00796b"
+            stroke-width="22"/>
+
+    <line x1="285"
+          y1="295"
+          x2="320"
+          y2="330"
+          stroke="#00796b"
+          stroke-width="22"
+          stroke-linecap="round"/>
+</svg>
