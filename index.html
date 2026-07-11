@@ -1,186 +1,85 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flashcard Trainer</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" type="image/svg+xml" href="images/flashcard-icon.svg" />
-  </head>
-  <body>
-    <main class="app-shell">
-      <h1>Flashcard Trainer</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashcard Trainer</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/svg+xml" href="images/flashcard-icon.svg" />
+</head>
+<body>
+  <main class="app-shell">
+    <h1>Flashcard Trainer</h1>
+    <div class="session-bar">
+      <p id="status" class="status is-pending-render" aria-live="polite"></p>
+      <button id="resetBtn" type="button" disabled>
+        <span class="reset-icon" aria-hidden="true">&#x21ba;</span>
+        <span>Reset</span>
+      </button>
+    </div>
 
-      <div class="session-bar">
-        <p id="status" class="status" aria-live="polite"></p>
-        <button id="resetBtn" type="button" disabled>
-          <span class="reset-icon" aria-hidden="true">&#x21ba;</span>
-          <span>Reset</span>
-        </button>
+    <section class="card-stage" aria-label="Flashcard display">
+      <button id="previousBtn" class="card-nav card-nav-prev" type="button" aria-label="Previous card" disabled>❮</button>
+      <div id="flashcard" class="flashcard is-disabled" role="group" aria-label="Flashcard" aria-disabled="true">
+        <div class="flashcard-inner">
+          <article class="flashcard-face flashcard-front" aria-label="Question side">
+            <button class="answer-status-indicator" type="button" data-side="front" hidden aria-label="Answer status: unanswered" title="Answer status: unanswered"><span class="answer-status-symbol" aria-hidden="true">○</span></button>
+            <h2 hidden>Question</h2>
+            <div class="empty-card-content">
+              <p id="questionText" class="is-pending-render"></p>
+              <pre id="csvExample" class="csv-example is-pending-render" hidden></pre>
+            </div>
+          </article>
+          <article class="flashcard-face flashcard-back" aria-label="Answer side">
+            <button class="answer-status-indicator" type="button" data-side="back" hidden aria-label="Answer status: unanswered" title="Answer status: unanswered"><span class="answer-status-symbol" aria-hidden="true">○</span></button>
+            <h2 hidden>Answer</h2>
+            <p id="answerText" class="is-pending-render"></p>
+          </article>
+        </div>
       </div>
+      <button id="nextBtn" class="card-nav card-nav-next" type="button" aria-label="Next card" disabled>❯</button>
+    </section>
 
-      <section class="card-stage" aria-label="Flashcard display">
-        <button id="previousBtn" class="card-nav card-nav-prev" type="button" aria-label="Previous card" disabled>❮</button>
-        <div id="flashcard" class="flashcard is-disabled" role="group" aria-label="Flashcard" aria-disabled="true">
-          <div class="flashcard-inner">
-            <article class="flashcard-face flashcard-front" aria-label="Question side">
-              <button
-                class="answer-status-indicator"
-                type="button"
-                data-side="front"
-                hidden
-                aria-label="Answer status: unanswered"
-                title="Answer status: unanswered"
-              >
-                <span class="answer-status-symbol" aria-hidden="true">○</span>
-              </button>
-              <h2 hidden>Question</h2>
-              <div class="empty-card-content">
-                <p id="questionText" class="is-pending-render"></p>
-                <pre id="csvExample" class="csv-example is-pending-render" hidden></pre>
-              </div>
-            </article>
-
-            <article class="flashcard-face flashcard-back" aria-label="Answer side">
-              <button
-                class="answer-status-indicator"
-                type="button"
-                data-side="back"
-                hidden
-                aria-label="Answer status: unanswered"
-                title="Answer status: unanswered"
-              >
-                <span class="answer-status-symbol" aria-hidden="true">○</span>
-              </button>
-              <h2 hidden>Answer</h2>
-              <p id="answerText" class="is-pending-render"></p>
-            </article>
+    <section class="settings-panel" aria-label="Flashcard controls">
+      <section class="control-group deck-controls" aria-label="Deck controls">
+        <button id="uploadBtn" type="button" class="upload-btn">Upload CSV</button>
+        <input id="csvInput" class="visually-hidden-input" type="file" accept=".csv,text/csv" />
+        <p id="fileName" class="file-name" aria-live="polite">No file chosen</p>
+      </section>
+      <section class="control-group session-controls" aria-label="Session controls">
+        <div class="session-row">
+          <div class="session-type-control">
+            <span class="control-label">Session:</span>
+            <div class="session-toggle" role="group" aria-label="Session type">
+              <button id="practiceSessionBtn" class="session-toggle-btn is-active" type="button" data-session-type="practice" aria-pressed="true" disabled>Practice</button>
+              <button id="testSessionBtn" class="session-toggle-btn" type="button" data-session-type="test" aria-pressed="false" disabled>Test</button>
+            </div>
+          </div>
+          <label class="shuffle-option"><input id="shuffleCardsCheckbox" type="checkbox" disabled /><span>Shuffle cards</span></label>
+        </div>
+        <div class="navigation-filter-section" aria-label="Navigation filter">
+          <span class="control-label">Hide:</span>
+          <div class="navigation-filter-options">
+            <label class="navigation-filter-option"><input id="hideCorrectCheckbox" type="checkbox" disabled /><span>Correct</span></label>
+            <label class="navigation-filter-option"><input id="hideIncorrectCheckbox" type="checkbox" disabled /><span>Incorrect</span></label>
+            <label class="navigation-filter-option"><input id="hideNoMarkCheckbox" type="checkbox" disabled /><span>No Mark</span></label>
           </div>
         </div>
-        <button id="nextBtn" class="card-nav card-nav-next" type="button" aria-label="Next card" disabled>❯</button>
       </section>
+    </section>
 
-      <section class="settings-panel" aria-label="Flashcard controls">
-        <section class="control-group settings-tabs-panel" aria-label="Mode category and options">
-          <div class="mode-tabs" role="tablist" aria-label="Flashcard settings">
-            <button
-              id="setupTab"
-              class="mode-tab is-active"
-              type="button"
-              role="tab"
-              aria-selected="true"
-              aria-controls="setupPanel"
-              tabindex="0"
-            >
-              Setup
-            </button>
-            <button
-              id="studyTab"
-              class="mode-tab"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="studyPanel"
-              tabindex="-1"
-            >
-              Study
-            </button>
-            <button
-              id="testTab"
-              class="mode-tab"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="testPanel"
-              tabindex="-1"
-            >
-              Test
-            </button>
-          </div>
-
-          <div class="mode-content">
-            <div id="setupPanel" class="mode-panel setup-panel" role="tabpanel" aria-labelledby="setupTab">
-              <div class="upload-section">
-                <button id="uploadBtn" type="button" class="upload-btn">Upload CSV</button>
-                <input id="csvInput" class="visually-hidden-input" type="file" accept=".csv,text/csv" />
-                <p id="fileName" class="file-name" aria-live="polite">No file chosen</p>
-              </div>
-            </div>
-
-            <div id="studyPanel" class="mode-panel" role="tabpanel" aria-labelledby="studyTab" hidden>
-              <p class="mode-panel-title">Study mode</p>
-              <label class="mode-option">
-                <input type="radio" name="modeChoice" value="sequential" checked />
-                <span>Sequential</span>
-              </label>
-              <label class="mode-option">
-                <input type="radio" name="modeChoice" value="studyRandomNoRepeat" />
-                <span>Random (no repetition)</span>
-              </label>
-            </div>
-
-            <div id="testPanel" class="mode-panel" role="tabpanel" aria-labelledby="testTab" hidden>
-              <p class="mode-panel-title">Test mode</p>
-              <label class="mode-option">
-                <input type="radio" name="modeChoice" value="testRandomNoRepeat" />
-                <span>Random (no repetition)</span>
-              </label>
-              <div class="navigation-filter-section" aria-label="Navigation filter">
-                <p class="mode-panel-title navigation-filter-title">Hide category:</p>
-                <div class="navigation-filter-options">
-                  <label class="navigation-filter-option">
-                    <input id="hideCorrectCheckbox" type="checkbox" />
-                    <span>Correct</span>
-                  </label>
-                  <label class="navigation-filter-option">
-                    <input id="hideIncorrectCheckbox" type="checkbox" />
-                    <span>Incorrect</span>
-                  </label>
-                  <label class="navigation-filter-option">
-                    <input id="hideNoMarkCheckbox" type="checkbox" />
-                    <span>No Mark</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </section>
-
-      <footer class="app-footer">
-        <span class="copyright">
-          © 2026 Igor Gorinov
-        </span>
-
-        <a id="disclaimerLink" class="footer-link" href="disclaimer.html">
-          Disclaimer
-        </a>
-      </footer>  
-    
-    </main>
-
-    <dialog id="disclaimerDialog" class="disclaimer-dialog" aria-labelledby="disclaimerDialogTitle">
-      <div class="disclaimer-dialog-header">
-        <h2 id="disclaimerDialogTitle">Disclaimer</h2>
-
-        <button id="closeDisclaimerBtn" type="button" class="dialog-close-btn" aria-label="Close disclaimer">
-          ×
-        </button>
-      </div>
-
-      <iframe
-        class="disclaimer-frame"
-        src="disclaimer.html"
-        title="Disclaimer content"
-      ></iframe>
-    </dialog>
-
-    <script defer src="js/constants.js"></script>
-    <script defer src="js/state.js"></script>
-    <script defer src="js/dom.js"></script>
-    <script defer src="js/csvParser.js"></script>
-    <script defer src="js/navigation.js"></script>
-    <script defer src="js/ui.js"></script>
-    <script defer src="js/main.js"></script>
-  </body>
+    <footer class="app-footer"><span class="copyright">© 2026 Igor Gorinov</span><a id="disclaimerLink" class="footer-link" href="disclaimer.html">Disclaimer</a></footer>
+  </main>
+  <dialog id="disclaimerDialog" class="disclaimer-dialog" aria-labelledby="disclaimerDialogTitle">
+    <div class="disclaimer-dialog-header"><h2 id="disclaimerDialogTitle">Disclaimer</h2><button id="closeDisclaimerBtn" type="button" class="dialog-close-btn" aria-label="Close disclaimer">×</button></div>
+    <iframe class="disclaimer-frame" src="disclaimer.html" title="Disclaimer content"></iframe>
+  </dialog>
+  <script defer src="js/constants.js"></script>
+  <script defer src="js/state.js"></script>
+  <script defer src="js/dom.js"></script>
+  <script defer src="js/csvParser.js"></script>
+  <script defer src="js/navigation.js"></script>
+  <script defer src="js/ui.js"></script>
+  <script defer src="js/main.js"></script>
+</body>
 </html>
