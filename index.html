@@ -19,7 +19,6 @@
     </div>
 
     <section class="card-stage" aria-label="Flashcard display">
-      <button id="previousBtn" class="card-nav card-nav-prev" type="button" aria-label="Previous card" disabled>❮</button>
       <div id="flashcard" class="flashcard is-disabled" role="group" aria-label="Flashcard" aria-disabled="true">
         <div class="flashcard-inner">
           <article class="flashcard-face flashcard-front" aria-label="Question side">
@@ -37,7 +36,19 @@
           </article>
         </div>
       </div>
-      <button id="nextBtn" class="card-nav card-nav-next" type="button" aria-label="Next card" disabled>❯</button>
+      <div class="card-nav-row">
+          <button id="previousBtn"
+                  class="card-nav"
+                  type="button"
+                  aria-label="Previous card"
+                  disabled>❮</button>
+
+          <button id="nextBtn"
+                  class="card-nav"
+                  type="button"
+                  aria-label="Next card"
+                  disabled>❯</button>
+      </div>
     </section>
 
     <section class="settings-panel" aria-label="Flashcard controls">
