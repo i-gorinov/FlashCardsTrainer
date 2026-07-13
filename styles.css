@@ -99,8 +99,10 @@ button {
     transition:background-color 160ms ease
 }
 
-button:hover:not(:disabled) {
-    background:var(--accent-dark)
+@media (any-hover: hover) {
+    button:hover:not(:disabled) {
+        background: var(--accent-dark);
+    }
 }
 
 button:disabled,input:disabled+span {
