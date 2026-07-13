@@ -9,6 +9,7 @@ Flashcard Trainer is a lightweight, browser-based study app for reviewing questi
 - Navigate between cards with Previous and Next controls
 - Track progress during a session
 - Work as a static website with no backend or external dependencies
+- Keep button visual states consistent across desktop hover and touch press interactions
 - Study in two modes:
   - Sequential
   - Random (with repetition)
@@ -21,8 +22,8 @@ Flashcard Trainer is a lightweight, browser-based study app for reviewing questi
 
 1. Download or clone this repository.
 2. Open index.html in a modern web browser, or serve the folder with any simple static server.
-3. In the Setup tab, upload a CSV file containing your flashcards.
-4. Choose Study or Test, then begin reviewing cards.
+3. Upload a CSV file containing your flashcards using Upload CSV.
+4. Choose Practice or Test, then begin reviewing cards.
 
 ## CSV format
 
@@ -51,17 +52,15 @@ Notes:
 
 ## Interface overview
 
-The app uses three tabs in the settings area:
+The app uses a compact controls panel with:
 
-- Setup
+- Deck controls
   - Upload a CSV file
   - View the currently selected filename
-- Study
-  - Sequential
-  - Random (with repetition)
-- Test
-  - Random (no repetition)
-  - Hide Correct, Incorrect, or No Mark cards while navigating
+- Session controls
+  - Session type toggle: Practice or Test
+  - Shuffle cards
+  - Hide Correct, Incorrect, or No Mark cards while navigating in Test mode
 
 ### App states
 
@@ -102,7 +101,6 @@ The marker is shown on both sides of the card and remains attached to the card w
 
 ```text
 .  
-├── app.js  
 ├── index.html  
 ├── styles.css  
 ├── js/  
@@ -118,7 +116,6 @@ The marker is shown on both sides of the card and remains attached to the card w
 
 ### File overview
 
-- app.js — application bootstrap entry point
 - index.html — app structure and UI markup
 - styles.css — visual styling, layout, and card animation
 - js/constants.js — shared constants and enums

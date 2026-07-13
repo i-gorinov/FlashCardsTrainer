@@ -96,12 +96,36 @@ button {
     border-color:transparent;
     font-weight:600;
     cursor:pointer;
-    transition:background-color 160ms ease
+    transition:background-color 160ms ease,color 160ms ease;
+    appearance:none;
+    -webkit-appearance:none;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation
+}
+
+button:active:not(:disabled) {
+    background:var(--accent-dark)
 }
 
 @media (any-hover: hover) {
     button:hover:not(:disabled) {
         background: var(--accent-dark);
+    }
+
+    .session-toggle-btn:hover:not(:disabled) {
+        background:color-mix(in srgb,var(--accent) 10%,white);
+        color:var(--accent-dark)
+    }
+
+    .card-nav:hover:not(:disabled) {
+        background:color-mix(in srgb,var(--accent) 10%,white);
+        color:var(--accent-dark)
+    }
+
+    #resetBtn:hover:not(:disabled) {
+        background:transparent;
+        color:var(--accent-dark);
+        text-decoration:underline
     }
 }
 
@@ -216,8 +240,8 @@ button:disabled,input:disabled+span {
     border-left:1px solid rgba(15,23,42,.12)
 }
 
-.session-toggle-btn:hover:not(:disabled) {
-    background:color-mix(in srgb,var(--accent) 10%,white);
+.session-toggle-btn:active:not(:disabled) {
+    background:color-mix(in srgb,var(--accent) 16%,white);
     color:var(--accent-dark)
 }
 
@@ -448,7 +472,7 @@ button:disabled,input:disabled+span {
     display:contents;
 }
 
-.card-nav:hover:not(:disabled),.card-nav:focus-visible {
+.card-nav:active:not(:disabled),.card-nav:focus-visible {
     background:color-mix(in srgb,var(--accent) 10%,white);
     color:var(--accent-dark)
 }
@@ -472,7 +496,7 @@ button:disabled,input:disabled+span {
     padding:6px 10px
 }
 
-#resetBtn:hover:not(:disabled) {
+#resetBtn:active:not(:disabled) {
     background:transparent;
     color:var(--accent-dark);
     text-decoration:underline
