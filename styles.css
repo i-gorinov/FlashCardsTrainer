@@ -112,6 +112,16 @@ button:active:not(:disabled) {
         background: var(--accent-dark);
     }
 
+    .answer-status-indicator:hover:not(:disabled):not(.is-readonly) {
+        background: rgba(235,235,235,.96);
+    }
+    .answer-status-indicator.is-correct:hover:not(:disabled):not(.is-readonly) {
+        background: rgba(187,240,210,.95);
+    }
+    .answer-status-indicator.is-incorrect:hover:not(:disabled):not(.is-readonly) {
+        background: rgba(254,220,220,.95);
+    }
+
     .session-toggle-btn:hover:not(:disabled) {
         background:color-mix(in srgb,var(--accent) 10%,white);
         color:var(--accent-dark)
