@@ -10,7 +10,7 @@
 <body>
   <main class="app-shell">
     <h1>Flashcard Trainer</h1>
-    <div class="session-bar">
+    <div class="status-bar">
       <p id="status" class="status is-pending-render" aria-live="polite"></p>
       <button id="resetBtn" type="button" disabled>
         <span class="reset-icon" aria-hidden="true">&#x21ba;</span>
@@ -63,15 +63,8 @@
         <input id="csvInput" class="visually-hidden-input" type="file" accept=".csv,text/csv" />
         <p id="fileName" class="file-name" aria-live="polite">No file chosen</p>
       </section>
-      <section class="control-group session-controls" aria-label="Session controls">
-        <div class="session-row">
-          <div class="session-type-control">
-            <span class="control-label">Session:</span>
-            <div class="session-toggle" role="group" aria-label="Session type">
-              <button id="practiceSessionBtn" class="session-toggle-btn is-active" type="button" data-session-type="practice" aria-pressed="true" disabled>Practice</button>
-              <button id="testSessionBtn" class="session-toggle-btn" type="button" data-session-type="test" aria-pressed="false" disabled>Test</button>
-            </div>
-          </div>
+      <section class="control-group review-controls" aria-label="Review controls">
+        <div class="study-options-row" aria-label="Review options">
           <label class="shuffle-option"><input id="shuffleCardsCheckbox" type="checkbox" disabled /><span>Shuffle cards</span></label>
           <label id="multiChoiceOption" class="shuffle-option" hidden><input id="multiChoiceCheckbox" type="checkbox" disabled /><span>Multi-choice</span></label>
         </div>

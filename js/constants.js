@@ -2,10 +2,6 @@ const Mode = Object.freeze({
   SEQUENTIAL: "sequential",
   RANDOM_NO_REPEAT: "randomNoRepeat",
 });
-const SessionType = Object.freeze({
-  PRACTICE: "practice",
-  TEST: "test",
-});
 const CardState = Object.freeze({
   EMPTY: "empty",
   READY: "ready",

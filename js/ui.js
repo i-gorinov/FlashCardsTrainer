@@ -2,17 +2,15 @@ let elements;
 function initializeApp() {
   elements = getElements();
   wireEvents();
-  state.sessionType = SessionType.PRACTICE;
   state.mode = Mode.SEQUENTIAL;
-  setSessionControlsEnabled(false);
-  syncSessionControls();
+  setReviewControlsEnabled(false);
+  syncStudyControls();
   resetToEmptyState();
   revealRenderedText();
 }
 function wireEvents() {
   elements.uploadBtn.addEventListener("click", () => elements.csvInput.click());
   elements.csvInput.addEventListener("change", handleFileUpload);
-  elements.sessionButtons.forEach((button) => button.addEventListener("click", handleSessionTypeChange));
   elements.shuffleCardsCheckbox.addEventListener("change", handleShuffleCardsChange);
   elements.multiChoiceCheckbox.addEventListener("change", handleMultiChoiceChange);
   elements.previousBtn.addEventListener("click", showPreviousCard);
@@ -24,6 +22,7 @@ function wireEvents() {
   elements.disclaimerLink.addEventListener("click", handleDisclaimerLinkClick);
   elements.closeDisclaimerBtn.addEventListener("click", closeDisclaimer);
   elements.disclaimerDialog.addEventListener("click", handleDisclaimerBackdropClick);
+  window.addEventListener("resize", handleViewportResize);
 }
 async function handleFileUpload(event) {
   const file = event.target.files?.[0];
@@ -35,53 +34,35 @@ async function handleFileUpload(event) {
     const parsedCards = await parseCardsFromCsv(text);
     if (parsedCards.length === 0) throw new Error("The CSV file does not contain any usable cards.");
     setCards(parsedCards);
-    applyDefaultShuffleForSession();
+    applyDefaultStudyOptions();
     updateModeFromShuffleControl();
-    syncNavigationFilterControls();
-    setSessionControlsEnabled(true);
-    syncSessionControls();
+    setReviewControlsEnabled(true);
+    syncStudyControls();
     resetDeck();
   } catch (error) {
     resetToEmptyState();
     updateStatus(error.message || "Could not read the selected file.");
   }
 }
-function handleSessionTypeChange(event) {
-  const selectedSessionType = event.currentTarget.dataset.sessionType;
-  if (!selectedSessionType || selectedSessionType === state.sessionType) return;
-  state.sessionType = selectedSessionType;
-  applyDefaultShuffleForSession();
-  applyDefaultMultiChoiceForSession();
-  updateModeFromShuffleControl();
-  syncSessionControls();
-  syncAnswerStatusIndicator();
-  if (state.cards.length > 0) resetDeck();
-}
 function handleShuffleCardsChange() {
   updateModeFromShuffleControl();
   if (state.cards.length > 0 && state.sessionStarted) resetDeck();
 }
-function applyDefaultShuffleForSession() { elements.shuffleCardsCheckbox.checked = state.sessionType === SessionType.TEST; }
-function applyDefaultMultiChoiceForSession() {
-  if (state.sessionType !== SessionType.TEST) return;
+function applyDefaultStudyOptions() {
+  elements.shuffleCardsCheckbox.checked = true;
   state.multiChoice = false;
   elements.multiChoiceCheckbox.checked = false;
 }
 function syncMultiChoiceOptionVisibility() {
   const hasDistractors = state.cards.some((card) => card.distractors && card.distractors.length > 0);
-  elements.multiChoiceOption.hidden = !hasDistractors || state.sessionType !== SessionType.TEST;
+  elements.multiChoiceOption.hidden = !hasDistractors;
 }
 function handleMultiChoiceChange() {
   state.multiChoice = elements.multiChoiceCheckbox.checked;
   if (state.cards.length > 0 && state.sessionStarted) renderCurrentCard();
 }
 function updateModeFromShuffleControl() { state.mode = elements.shuffleCardsCheckbox.checked ? Mode.RANDOM_NO_REPEAT : Mode.SEQUENTIAL; }
-function syncSessionControls() {
-  elements.sessionButtons.forEach((button) => {
-    const active = button.dataset.sessionType === state.sessionType;
-    button.classList.toggle("is-active", active);
-    button.setAttribute("aria-pressed", String(active));
-  });
+function syncStudyControls() {
   syncMultiChoiceOptionVisibility();
   syncNavigationFilterControls();
 }
@@ -99,22 +80,11 @@ function resetDeck() {
 }
 function showNextCard() {
   if (state.cards.length === 0) return;
-  if (state.sessionType === SessionType.TEST) { moveToVisibleCard(1); return; }
-  if (state.cursor >= state.order.length - 1) {
-    updateStatus(`End of deck. You have viewed ${state.progress.viewedCount} of ${state.cards.length} cards. Press Reset.`);
-    updateNavigationControls(true); return;
-  }
-  state.cursor += 1;
-  state.currentCardIndex = state.order[state.cursor];
-  renderCurrentCard();
+  moveToVisibleCard(1);
 }
 function showPreviousCard() {
   if (state.cards.length === 0) return;
-  if (state.sessionType === SessionType.TEST) { moveToVisibleCard(-1); return; }
-  if (state.cursor <= 0) { updateNavigationControls(true); return; }
-  state.cursor -= 1;
-  state.currentCardIndex = state.order[state.cursor];
-  renderCurrentCard();
+  moveToVisibleCard(-1);
 }
 function moveToVisibleCard(direction) {
   const nextCursor = getVisibleCardCursor(state.cursor, direction);
@@ -157,18 +127,25 @@ function renderCurrentCard() {
   elements.flashcard.setAttribute("aria-disabled", "false");
   setCardState(CardState.ACTIVE);
   syncAnswerStatusIndicator();
-  updateStatus(formatProgressText());
+  const progressStatus = formatProgressText();
+  updateStatus(progressStatus.message, progressStatus.isHtml);
   updateNavigationControls(true);
 }
 function formatProgressText() {
   const total = state.cards.length;
   const currentPosition = total > 0 ? state.cursor + 1 : 0;
-  if (state.sessionType === SessionType.TEST) {
-    const { correct, incorrect } = computeTestTotals();
-    const score = total > 0 ? Math.round((correct / total) * 100) : 0;
-    return `Question ${currentPosition}/${total} | Correct: ${correct} | Incorrect: ${incorrect} | Score: ${score}%`;
+  const { correct, incorrect } = computeTestTotals();
+  const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+  if (isMobileViewport()) {
+    return {
+      message: `${currentPosition}/${total} | <span class="status-icon status-icon-correct" aria-hidden="true">✓</span>${correct} | <span class="status-icon status-icon-incorrect" aria-hidden="true">✗</span>${incorrect} | <span class="status-icon status-icon-score" aria-hidden="true">★</span>${score}%`,
+      isHtml: true,
+    };
   }
-  return `Card ${currentPosition}/${total} | Viewed: ${state.progress.viewedCount}`;
+  return {
+    message: `Question ${currentPosition}/${total} | Correct: ${correct} | Incorrect: ${incorrect} | Score: ${score}%`,
+    isHtml: false,
+  };
 }
 function computeTestTotals() {
   return state.answerStatuses.reduce((totals, status) => ({
@@ -177,7 +154,7 @@ function computeTestTotals() {
   }), { correct: 0, incorrect: 0 });
 }
 function syncAnswerStatusIndicator() {
-  const shouldShowIndicator = state.sessionType === SessionType.TEST && state.currentCardIndex >= 0 && Boolean(state.cards[state.currentCardIndex]);
+  const shouldShowIndicator = state.currentCardIndex >= 0 && Boolean(state.cards[state.currentCardIndex]);
   elements.answerStatusIndicators.forEach((indicator) => {
     indicator.hidden = !shouldShowIndicator;
     resetAnswerStatusClasses(indicator);
@@ -200,13 +177,14 @@ function animateAnswerStatusIndicator() {
 function handleAnswerStatusIndicatorClick(event) {
   event.preventDefault(); event.stopPropagation();
   const indicator = event.currentTarget;
-  if (indicator.dataset.side !== "back" || state.cards.length === 0 || state.sessionType !== SessionType.TEST || state.currentCardIndex < 0) return;
+  if (indicator.dataset.side !== "back" || state.cards.length === 0 || state.currentCardIndex < 0) return;
   const currentStatus = state.answerStatuses[state.currentCardIndex] || AnswerStatus.UNANSWERED;
   state.answerStatuses[state.currentCardIndex] = getNextAnswerStatus(currentStatus);
   syncAnswerStatusIndicator();
   animateAnswerStatusIndicator();
   updateNavigationControls(true);
-  updateStatus(formatProgressText());
+  const progressStatus = formatProgressText();
+  updateStatus(progressStatus.message, progressStatus.isHtml);
 }
 function getNextAnswerStatus(status) { return status === AnswerStatus.UNANSWERED ? AnswerStatus.CORRECT : status === AnswerStatus.CORRECT ? AnswerStatus.INCORRECT : AnswerStatus.UNANSWERED; }
 function toggleCardFlip() {
@@ -234,15 +212,13 @@ function setCardState(cardState) {
   elements.csvExample.hidden = !isEmpty;
 }
 function resetToEmptyState() {
-  resetAllState(SessionType.PRACTICE, Mode.SEQUENTIAL);
-  elements.practiceSessionBtn.setAttribute("aria-pressed", "true");
-  elements.testSessionBtn.setAttribute("aria-pressed", "false");
+  resetAllState(Mode.SEQUENTIAL);
   elements.shuffleCardsCheckbox.checked = false;
   elements.multiChoiceCheckbox.checked = false;
   elements.multiChoiceOption.hidden = true;
   elements.multiChoiceOptions.hidden = true;
-  setSessionControlsEnabled(false);
-  syncSessionControls();
+  setReviewControlsEnabled(false);
+  syncStudyControls();
   elements.questionCategory.textContent = "";
   elements.questionCategory.hidden = true;
   elements.questionText.textContent = EMPTY_CARD_TEXT;
@@ -261,7 +237,7 @@ function handleNavigationFilterChange() {
     noMark: elements.hideNoMarkCheckbox.checked,
   };
   syncNavigationFilterControls();
-  if (state.sessionType === SessionType.TEST && state.sessionStarted && state.currentCardIndex >= 0) updateNavigationControls(true);
+  if (state.sessionStarted && state.currentCardIndex >= 0) updateNavigationControls(true);
 }
 function syncNavigationFilterControls() {
   const filterCheckboxes = getNavigationFilterCheckboxes();
@@ -270,7 +246,7 @@ function syncNavigationFilterControls() {
   filterCheckboxes.forEach((checkbox) => {
     const lockedByFilterLimit = checkedCount >= 2 && !checkbox.checked;
     checkbox.dataset.lockedByFilterLimit = String(lockedByFilterLimit);
-    checkbox.disabled = state.cards.length === 0 || state.sessionType !== SessionType.TEST || lockedByFilterLimit;
+    checkbox.disabled = state.cards.length === 0 || lockedByFilterLimit;
   });
 }
 function getNavigationFilterCheckboxes() {
@@ -279,14 +255,26 @@ function getNavigationFilterCheckboxes() {
     return checkbox;
   });
 }
-function setSessionControlsEnabled(enabled) {
-  elements.sessionButtons.forEach((button) => { button.disabled = !enabled; button.setAttribute("aria-disabled", String(!enabled)); });
+function setReviewControlsEnabled(enabled) {
   elements.shuffleCardsCheckbox.disabled = !enabled;
   elements.multiChoiceCheckbox.disabled = !enabled;
   syncNavigationFilterControls();
 }
 function setSelectedFileName(fileName) { elements.fileName.textContent = fileName; elements.fileName.title = fileName; }
-function updateStatus(message) { elements.status.textContent = message; }
+function updateStatus(message, isHtml = false) {
+  if (isHtml) {
+    elements.status.innerHTML = message;
+    return;
+  }
+  elements.status.textContent = message;
+}
+function isMobileViewport() { return window.matchMedia("(max-width: 600px)").matches; }
+function handleViewportResize() {
+  if (state.cardState === CardState.ACTIVE && state.cards.length > 0) {
+    const status = formatProgressText();
+    updateStatus(status.message, status.isHtml);
+  }
+}
 function readFileAsText(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

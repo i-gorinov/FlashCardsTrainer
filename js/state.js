@@ -1,7 +1,6 @@
 function createInitialState() {
   return {
     cards: [],
-    sessionType: SessionType.PRACTICE,
     mode: Mode.SEQUENTIAL,
     order: [],
     cursor: 0,
@@ -23,9 +22,8 @@ function resetAnswerStatuses() { state.answerStatuses = state.cards.map(() => An
 function resetMultiChoiceOptionOrders() { state.multiChoiceOptionOrders = state.cards.map(() => null); }
 function resetSessionState() { state.sessionStarted = false; state.answerStatuses = []; state.multiChoice = false; state.multiChoiceOptionOrders = []; resetCoreState(); resetProgress(); resetNavigationFilters(); }
 function setCards(cards) { state.cards = cards; resetSessionState(); }
-function resetAllState(selectedSessionType = SessionType.PRACTICE, selectedMode = Mode.SEQUENTIAL) {
+function resetAllState(selectedMode = Mode.SEQUENTIAL) {
   state.cards = [];
-  state.sessionType = selectedSessionType;
   state.mode = selectedMode;
   state.cardState = CardState.EMPTY;
   resetSessionState();

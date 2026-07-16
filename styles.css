@@ -52,7 +52,7 @@ h1 {
     visibility:hidden
 }
 
-.session-bar {
+.status-bar {
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -64,11 +64,11 @@ h1 {
     border:1px solid color-mix(in srgb,var(--accent) 20%,white)
 }
 
-.session-bar:has(#resetBtn[hidden]) {
+.status-bar:has(#resetBtn[hidden]) {
     justify-content:center
 }
 
-.session-bar:has(#resetBtn[hidden]) .status {
+.status-bar:has(#resetBtn[hidden]) .status {
     text-align:center;
     flex:0 1 auto
 }
@@ -83,6 +83,28 @@ h1 {
     flex:1 1 240px;
     min-width:0;
     overflow-wrap:anywhere
+}
+
+.status-icon {
+    display:inline-block;
+    width:1em;
+    text-align:center;
+    font-size:1em;
+    font-weight:700;
+    line-height:1;
+    vertical-align:baseline
+}
+
+.status-icon-correct {
+    color:#15803d
+}
+
+.status-icon-incorrect {
+    color:#dc2626
+}
+
+.status-icon-score {
+    color:#ca8a04
 }
 
 button {
@@ -120,11 +142,6 @@ button:active:not(:disabled) {
     }
     .answer-status-indicator.is-incorrect:hover:not(:disabled):not(.is-readonly) {
         background: rgba(254,220,220,.95);
-    }
-
-    .session-toggle-btn:hover:not(:disabled) {
-        background:color-mix(in srgb,var(--accent) 10%,white);
-        color:var(--accent-dark)
     }
 
     .upload-btn:hover:not(:disabled) {
@@ -199,29 +216,37 @@ button:disabled,input:disabled+span {
     text-overflow:ellipsis
 }
 
-.session-controls {
-    display:grid;
-    gap:8px;
+.review-controls {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:nowrap;
     padding:12px 14px;
     border:1px solid rgba(15,23,42,.15);
     border-radius:12px;
     background:color-mix(in srgb,var(--panel) 92%,transparent)
 }
 
-.session-row {
+.study-options-row {
     display:flex;
     align-items:center;
-    justify-content:space-between;
+    justify-content:flex-start;
     gap:14px;
-    flex-wrap:wrap
+    flex-wrap:wrap;
+    min-width:0;
+    flex:1 1 auto
 }
 
-.session-type-control,.navigation-filter-section {
+.navigation-filter-section {
     display:flex;
     align-items:center;
+    justify-content:flex-end;
     gap:10px;
     min-width:0;
-    flex-wrap:wrap
+    flex-wrap:wrap;
+    margin-left:auto;
+    flex:0 1 auto
 }
 
 .control-label {
@@ -229,40 +254,6 @@ button:disabled,input:disabled+span {
     color:var(--muted);
     font-size:.9rem;
     font-weight:700
-}
-
-.session-toggle {
-    display:inline-flex;
-    align-items:stretch;
-    border:1px solid rgba(15,23,42,.15);
-    border-radius:999px;
-    overflow:hidden;
-    background:#fff
-}
-
-.session-toggle-btn {
-    width:auto;
-    min-width:92px;
-    padding:8px 14px;
-    border:0;
-    border-radius:0;
-    background:transparent;
-    color:var(--muted);
-    box-shadow:none
-}
-
-.session-toggle-btn+.session-toggle-btn {
-    border-left:1px solid rgba(15,23,42,.12)
-}
-
-.session-toggle-btn:active:not(:disabled) {
-    background:color-mix(in srgb,var(--accent) 16%,white);
-    color:var(--accent-dark)
-}
-
-.session-toggle-btn.is-active {
-    background:var(--accent);
-    color:#fff
 }
 
 .shuffle-option,.navigation-filter-option {
@@ -282,6 +273,7 @@ button:disabled,input:disabled+span {
 .navigation-filter-options {
     display:flex;
     flex-wrap:wrap;
+    justify-content:flex-end;
     gap:10px 14px
 }
 
@@ -631,6 +623,25 @@ button:disabled,input:disabled+span {
 
 @media(max-width:768px) {
 
+    .review-controls {
+        flex-wrap:wrap;
+        row-gap:10px;
+    }
+
+    .study-options-row {
+        flex:1 1 100%;
+    }
+
+    .navigation-filter-section {
+        flex:1 1 100%;
+        justify-content:flex-start;
+        margin-left:0;
+    }
+
+    .navigation-filter-options {
+        justify-content:flex-start;
+    }
+
     .card-stage {
         grid-template-columns:1fr;
         grid-template-areas:
@@ -668,7 +679,7 @@ button:disabled,input:disabled+span {
 }
 
 @media(max-width:600px) {
-    .session-bar {
+    .status-bar {
         flex-direction:column;
         align-items:stretch;
         text-align:center
@@ -683,24 +694,31 @@ button:disabled,input:disabled+span {
         width:100%
     }
 
-    .session-row {
-        align-items:stretch
-    }
-    .session-type-control,
-    .navigation-filter-section {
-        align-items:center
+    .study-options-row {
+        align-items:stretch;
+        row-gap:10px
     }
 
-    .session-type-control,.navigation-filter-section {
+    .navigation-filter-section {
+        align-items:flex-start;
+        flex-direction:column;
+        gap:8px
+    }
+
+    .study-options-row,.navigation-filter-section {
         width:100%
     }
 
-    .session-toggle {
-        flex:1 1 auto
+    .navigation-filter-options {
+        width:100%;
+        gap:8px 12px;
     }
 
-    .session-toggle-btn {
-        flex:1 1 50%
+    .status {
+        font-size:.98rem;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis
     }
 
     .app-footer {
@@ -734,7 +752,7 @@ button:disabled,input:disabled+span {
         flex-basis:100%
     }
 
-    .session-controls {
+    .review-controls {
         padding:12px
     }
 

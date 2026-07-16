@@ -6,20 +6,16 @@ function getVisibleCardCursor(startCursor, direction) {
   const step = direction > 0 ? 1 : -1;
   let cursor = startCursor + step;
   while (cursor >= 0 && cursor < state.order.length) {
-    if (isCardVisibleInTestNavigation(state.order[cursor])) return cursor;
+    if (isCardVisibleInNavigation(state.order[cursor])) return cursor;
     cursor += step;
   }
   return -1;
 }
 function getNavigationState(enabled) {
   if (!enabled || state.cards.length === 0) return { canGoPrevious: false, canGoNext: false };
-  if (state.sessionType === SessionType.TEST) {
-    return { canGoPrevious: getVisibleCardCursor(state.cursor, -1) !== -1, canGoNext: getVisibleCardCursor(state.cursor, 1) !== -1 };
-  }
-  return { canGoPrevious: state.cursor > 0, canGoNext: state.cursor < state.order.length - 1 };
+  return { canGoPrevious: getVisibleCardCursor(state.cursor, -1) !== -1, canGoNext: getVisibleCardCursor(state.cursor, 1) !== -1 };
 }
-function isCardVisibleInTestNavigation(cardIndex) {
-  if (state.sessionType !== SessionType.TEST) return true;
+function isCardVisibleInNavigation(cardIndex) {
   const cardStatus = state.answerStatuses[cardIndex] || AnswerStatus.UNANSWERED;
   if (cardStatus === AnswerStatus.CORRECT) return !state.navigationFilters.correct;
   if (cardStatus === AnswerStatus.INCORRECT) return !state.navigationFilters.incorrect;
