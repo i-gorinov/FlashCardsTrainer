@@ -3,248 +3,694 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flashcard Trainer - User Guide</title>
-  <link rel="stylesheet" href="user-guide.css" />
+  <title>Flashcard Trainer User Guide</title>
+  <link rel="stylesheet" href="../css/user-guide.css" />
+  <link rel="icon" type="image/svg+xml" href="../images/flashcard-icon.svg" />
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
-  <div class="guide-shell">
-    <header class="guide-header" id="top">
-      <h1>Flashcard Trainer</h1>
-      <p class="intro-summary">Learn and review CSV-based flashcard decks using card flipping, shuffled study sessions, multiple-choice options, answer marking, progress tracking and focused review filters.</p>
+  <main id="main-content" class="guide-shell">
+    <header class="guide-header">
+      <h1>Flashcard Trainer User Guide</h1>
+      <p class="intro-summary">
+        Learn how to prepare CSV files, upload flashcards, review cards, use multi-choice mode, and generate compatible CSV files with AI.
+      </p>
     </header>
 
-    <nav class="toc" aria-labelledby="contents-heading">
-      <h2 id="contents-heading">Contents</h2>
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Contents</h2>
       <ol>
-        <li><a href="#quick-start">Quick Start</a></li>
-        <li><a href="#csv-file-format">CSV File Format</a></li>
-        <li><a href="#studying-flashcards">Studying Flashcards</a></li>
-        <li><a href="#navigation">Navigation</a></li>
-        <li><a href="#study-options">Study Options</a></li>
-        <li><a href="#marking-answers">Marking Answers</a></li>
-        <li><a href="#progress-tracking">Progress Tracking</a></li>
-        <li><a href="#filtering-cards">Filtering Cards</a></li>
-        <li><a href="#resetting-a-session">Resetting a Session</a></li>
-        <li><a href="#error-messages">Error Messages</a></li>
-        <li><a href="#best-practices">Best Practices</a></li>
-        <li><a href="#notes-and-limitations">Notes and Limitations</a></li>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#csv-format">CSV file format</a></li>
+        <li><a href="#uploading">Uploading a CSV file</a></li>
+        <li><a href="#reviewing">Reviewing flashcards</a></li>
+        <li><a href="#navigation-filters">Navigation filters</a></li>
+        <li><a href="#multi-choice">Multi-choice mode</a></li>
+        <li><a href="#ai-generation">Generating CSV files with AI</a></li>
+        <li><a href="#notes-limitations">Notes &amp; limitations</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ol>
     </nav>
 
-    <main id="main-content">
-      <section id="quick-start" class="guide-section">
-        <h2>Quick Start</h2>
-        <ol class="steps">
-          <li>Click <strong>Upload CSV</strong>.</li>
-          <li>Select a CSV file containing your flashcards.</li>
-          <li>The study session starts automatically after the file is loaded.</li>
-          <li>Read the question shown on the card.</li>
-          <li>Click or tap the card to reveal the answer.</li>
-          <li>On the answer side, mark your result as <strong>Unanswered</strong>, <strong>Correct</strong> or <strong>Incorrect</strong>.</li>
-          <li>Move through the deck using the <strong>Previous</strong> and <strong>Next</strong> buttons.</li>
-          <li>Monitor your progress and score in the status bar.</li>
-        </ol>
-        <p class="note"><strong>Tip:</strong> If you are using the app for revision, keep <strong>Shuffle Cards</strong> enabled so you do not learn the order of the cards.</p>
-      </section>
+    <section id="overview" class="guide-section">
+      <h2>Overview</h2>
+      <p>
+        Flashcard Trainer is a simple browser-based study tool. It reads flashcards from a CSV file and lets you review them one by one.
+      </p>
+      <p>
+        Each card has a question and an answer. Cards can also include an optional category and optional distractor answers for multi-choice practice.
+      </p>
+    </section>
 
-      <section id="csv-file-format" class="guide-section">
-        <h2>CSV File Format</h2>
-        <p>The CSV file must contain a header row and at least one flashcard row. The required columns are <code>Question</code> and <code>Answer</code>.</p>
-        <p>Column names are matched by header name, not by position, so columns may appear in any order.</p>
+    <section id="csv-format" class="guide-section">
+      <h2>CSV file format</h2>
+      <p>
+        Your CSV file must include a header row and at least one data row. The required columns are <code>Question</code> and <code>Answer</code>.
+      </p>
 
-        <h3>Minimum Required Format</h3>
-        <pre><code>Question,Answer
-What is HTML?,A markup language
-What is CSS?,A stylesheet language</code></pre>
-
-        <h3>Required Columns</h3>
-        <dl class="definition-list">
-          <div>
-            <dt><code>Question</code></dt>
-            <dd>The text shown on the front of the flashcard.</dd>
-          </div>
-          <div>
-            <dt><code>Answer</code></dt>
-            <dd>The text shown on the back of the flashcard.</dd>
-          </div>
-        </dl>
-
-        <h3>Optional Columns</h3>
-        <h4>Category</h4>
-        <p>The optional <code>Category</code> column displays a category label above the question. This is useful for larger decks that cover multiple topics.</p>
-        <pre><code>Question,Answer,Category
-What is HTML?,A markup language,Web Development</code></pre>
-
-        <h4>Multiple-Choice Distractors</h4>
-        <p>Columns beginning with <code>Distractor</code> are used to generate multiple-choice options. Distractors are incorrect answers shown alongside the correct answer.</p>
-        <pre><code>Question,Answer,Distractor1,Distractor2,Distractor3
-What is HTML?,Markup language,Database,Protocol,Operating System</code></pre>
-        <p>Any number of distractor columns may be supplied. The <strong>Multiple Choice</strong> option appears only when at least one card contains distractors.</p>
-      </section>
-
-      <section id="studying-flashcards" class="guide-section">
-        <h2>Studying Flashcards</h2>
-        <h3>Question Side</h3>
-        <p>The front of the card displays the question text. If the CSV includes a category, the category appears above the question. If Multiple Choice mode is enabled, the answer options are also shown on the question side.</p>
-        <h3>Answer Side</h3>
-        <p>Click or tap the card to flip it and reveal the answer. In Multiple Choice mode, the answer side shows the correct option letter and the answer text.</p>
-      </section>
-
-      <section id="navigation" class="guide-section">
-        <h2>Navigation</h2>
-        <p>Use the navigation buttons to move through the deck.</p>
-        <table>
-          <thead>
-            <tr><th>Button</th><th>Action</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><span class="nav-symbol">❮</span></td><td>Go to the previous available card.</td></tr>
-            <tr><td><span class="nav-symbol">❯</span></td><td>Go to the next available card.</td></tr>
-          </tbody>
-        </table>
-        <p>Navigation respects any active filters. For example, if <strong>Hide Correct</strong> is enabled, cards marked Correct are skipped.</p>
-      </section>
-
-      <section id="study-options" class="guide-section">
-        <h2>Study Options</h2>
-        <h3>Shuffle Cards</h3>
-        <p>When <strong>Shuffle Cards</strong> is enabled, cards are presented in random order and are not repeated during the session. Changing this setting restarts the current session.</p>
-        <h3>Multiple Choice</h3>
-        <p>The <strong>Multiple Choice</strong> option appears only when the loaded CSV contains distractor columns. When enabled, the app displays answer options on the question side and reveals the correct option when the card is flipped.</p>
-      </section>
-
-      <section id="marking-answers" class="guide-section">
-        <h2>Marking Answers</h2>
-        <p>After reviewing the answer, click the circular status indicator on the answer side of the card. Each click cycles through the available answer states.</p>
-        <ul class="status-list">
-          <li><span class="status-dot unanswered">○</span> <strong>Unanswered</strong>: no mark has been applied.</li>
-          <li><span class="status-dot correct">✓</span> <strong>Correct</strong>: you answered correctly.</li>
-          <li><span class="status-dot incorrect">✗</span> <strong>Incorrect</strong>: you answered incorrectly.</li>
-        </ul>
-        <p class="note"><strong>Note:</strong> Answer status can only be changed while viewing the answer side of the card.</p>
-      </section>
-
-      <section id="progress-tracking" class="guide-section">
-        <h2>Progress Tracking</h2>
-        <p>The status bar shows your current card position, the number of cards marked Correct, the number of cards marked Incorrect and your overall score.</p>
-        <h3>Desktop Format</h3>
-        <pre><code>Question 12/100 | Correct: 8 | Incorrect: 2 | Score: 8%</code></pre>
-        <h3>Mobile Format</h3>
-        <pre><code>12/100 | ✓8 | ✗2 | ★8%</code></pre>
-        <h3>Score Calculation</h3>
-        <p>The score is calculated as:</p>
-        <pre><code>Correct Answers ÷ Total Cards × 100</code></pre>
-        <p>Unanswered cards are included in the total card count, so they reduce the score until they are marked Correct.</p>
-      </section>
-
-      <section id="filtering-cards" class="guide-section">
-        <h2>Filtering Cards</h2>
-        <p>Filters let you focus on specific groups of cards. Filtered cards remain in the deck but are skipped during navigation.</p>
-        <ul>
-          <li><strong>Hide Correct</strong>: skips cards marked Correct.</li>
-          <li><strong>Hide Incorrect</strong>: skips cards marked Incorrect.</li>
-          <li><strong>Hide No Mark</strong>: skips cards that are still Unanswered.</li>
-        </ul>
-        <h3>Common Review Scenarios</h3>
-        <div class="scenario-grid">
-          <article>
-            <h4>Review Incorrect Answers Only</h4>
-            <p>Enable <strong>Hide Correct</strong> and <strong>Hide No Mark</strong>.</p>
-          </article>
-          <article>
-            <h4>Review Unanswered Cards Only</h4>
-            <p>Enable <strong>Hide Correct</strong> and <strong>Hide Incorrect</strong>.</p>
-          </article>
-          <article>
-            <h4>Review Correct Answers Only</h4>
-            <p>Enable <strong>Hide Incorrect</strong> and <strong>Hide No Mark</strong>.</p>
-          </article>
+      <h3>Required columns</h3>
+      <dl class="definition-list">
+        <div>
+          <dt><code>Question</code></dt>
+          <dd>The text shown on the front of the flashcard.</dd>
         </div>
-        <p class="note"><strong>Note:</strong> The application limits filter combinations to prevent all cards from being hidden at the same time.</p>
-      </section>
+        <div>
+          <dt><code>Answer</code></dt>
+          <dd>The text shown on the back of the flashcard.</dd>
+        </div>
+      </dl>
 
-      <section id="resetting-a-session" class="guide-section">
-        <h2>Resetting a Session</h2>
-        <p>Click <strong>Reset</strong> to restart the current study session using the loaded CSV file and current study options.</p>
-        <p>Resetting a session will:</p>
-        <ul>
-          <li>Clear all answer markings.</li>
-          <li>Reset progress statistics.</li>
-          <li>Rebuild the study order.</li>
-          <li>Return to the first card in the new session.</li>
-        </ul>
-        <p>The loaded CSV file remains available and does not need to be uploaded again.</p>
-      </section>
+      <h3>Optional columns</h3>
+      <dl class="definition-list">
+        <div>
+          <dt><code>Category</code></dt>
+          <dd>An optional topic or grouping label shown above the question.</dd>
+        </div>
+        <div>
+          <dt><code>Distractor-1</code></dt>
+          <dd>An incorrect answer option used in multi-choice mode.</dd>
+        </div>
+        <div>
+          <dt><code>Distractor-2</code></dt>
+          <dd>An incorrect answer option used in multi-choice mode.</dd>
+        </div>
+        <div>
+          <dt><code>Distractor-3</code></dt>
+          <dd>An incorrect answer option used in multi-choice mode.</dd>
+        </div>
+      </dl>
 
-      <section id="error-messages" class="guide-section">
-        <h2>Error Messages</h2>
-        <p>You may see an error message if the selected CSV file cannot be used. Common causes include:</p>
-        <ul>
-          <li>The CSV file does not contain a header row and at least one data row.</li>
-          <li>The required <code>Question</code> or <code>Answer</code> column is missing.</li>
-          <li>The CSV contains malformed quoted text.</li>
-          <li>No valid question and answer pairs can be extracted.</li>
-        </ul>
-      </section>
+      <h3>Example</h3>
+      <pre><code>"Category","Question","Answer","Distractor-1","Distractor-2","Distractor-3"
+"Web","What is HTML?","A markup language for web pages","A database language","A web server","An image format"
+"Web","What is CSS?","A stylesheet language","A programming runtime","A browser cache","A network protocol"</code></pre>
 
-      <section id="best-practices" class="guide-section">
-        <h2>Best Practices</h2>
-        <ul>
-          <li>Use <strong>Shuffle Cards</strong> for revision and recall practice.</li>
-          <li>Mark every answer honestly to keep the score meaningful.</li>
-          <li>Use filters to focus on weaker areas after the first pass through the deck.</li>
-          <li>Add categories to organise larger decks by topic.</li>
-          <li>Add distractors to create exam-style multiple-choice practice.</li>
-          <li>Reset and repeat sessions until you consistently reach your target score.</li>
-        </ul>
-      </section>
+      <p class="note">
+        Column names are not case-sensitive. Empty rows are ignored. Rows without both a question and an answer are skipped.
+      </p>
+    </section>
 
-      <section id="notes-and-limitations" class="guide-section">
-        <h2>Notes and Limitations</h2>
-        <ul>
-          <li>Progress is not permanently saved.</li>
-          <li>Reloading the page starts a new session.</li>
-          <li>Answer markings are retained only for the current browser session.</li>
-          <li>Multiple Choice mode is available only when distractor columns exist.</li>
-          <li>The application runs in the browser and does not require server-side processing.</li>
-        </ul>
-      </section>
+    <section id="uploading" class="guide-section">
+      <h2>Uploading a CSV file</h2>
+      <ol class="steps">
+        <li>Select <strong>Upload CSV</strong>.</li>
+        <li>Choose a CSV file from your device.</li>
+        <li>The first card is shown after the file is successfully loaded.</li>
+        <li>If the file cannot be read, check that it includes the required <code>Question</code> and <code>Answer</code> columns.</li>
+      </ol>
+    </section>
 
-      <section id="faq" class="guide-section faq-section">
-        <h2>Frequently Asked Questions</h2>
-        <details>
-          <summary>Does column order matter?</summary>
-          <p>No. The application identifies columns by their header names, so columns may appear in any order.</p>
-        </details>
-        <details>
-          <summary>Are column names case-sensitive?</summary>
-          <p>No. Header names are matched without regard to letter case, so <code>Question</code>, <code>question</code> and <code>QUESTION</code> are treated the same.</p>
-        </details>
-        <details>
-          <summary>Why does the Multiple Choice option not appear?</summary>
-          <p>The loaded CSV file does not contain any usable distractor values. Add columns such as <code>Distractor1</code>, <code>Distractor2</code> and <code>Distractor3</code> if you want to use Multiple Choice mode.</p>
-        </details>
-        <details>
-          <summary>Can I save my progress?</summary>
-          <p>No. Progress, score and answer markings are available only during the current browser session.</p>
-        </details>
-        <details>
-          <summary>Why is the Next or Previous button disabled?</summary>
-          <p>There may be no available card in that direction, or the remaining cards may be hidden by the active filters.</p>
-        </details>
-        <details>
-          <summary>What happens when I click Reset?</summary>
-          <p>The study session restarts. All answer markings and progress statistics are cleared, but the loaded CSV file remains available.</p>
-        </details>
-        <details>
-          <summary>Is my CSV file uploaded anywhere?</summary>
-          <p>No. The CSV file is read and processed locally in your browser.</p>
-        </details>
-      </section>
-    </main>
-  </div>
+    <section id="reviewing" class="guide-section">
+      <h2>Reviewing flashcards</h2>
+      <p>
+        Click or tap the card to flip between the question and answer. Use the previous and next buttons to move through the deck.
+      </p>
+      <p>
+        On the answer side, use the status button to mark the card as correct, incorrect, or unanswered.
+      </p>
+      <ul class="status-list">
+        <li><span class="status-dot correct">✓</span> Correct</li>
+        <li><span class="status-dot incorrect">✗</span> Incorrect</li>
+        <li><span class="status-dot unanswered">○</span> Unanswered</li>
+      </ul>
+      <p>
+        The status line shows your current position, the number of correct and incorrect answers, and your current score.
+      </p>
+    </section>
+
+    <section id="navigation-filters" class="guide-section">
+      <h2>Navigation filters</h2>
+      <p>
+        The <strong>Hide</strong> options let you skip cards based on their current answer status.
+      </p>
+      <ul>
+        <li><strong>Correct</strong> hides cards marked as correct.</li>
+        <li><strong>Incorrect</strong> hides cards marked as incorrect.</li>
+        <li><strong>No Mark</strong> hides unanswered cards.</li>
+      </ul>
+      <p class="note">
+        At least one status group must remain visible, so the app prevents all three groups from being hidden at the same time.
+      </p>
+    </section>
+
+    <section id="multi-choice" class="guide-section">
+      <h2>Multi-choice mode</h2>
+      <p>
+        Multi-choice mode is available when at least one card includes distractor columns. When enabled, the front of the card shows the correct answer mixed with the distractors.
+      </p>
+      <p>
+        The back of the card shows the correct option. Distractors should be plausible but clearly incorrect for the specific question.
+      </p>
+    </section>
+
+    <section id="ai-generation" class="guide-section">
+      <h2>Generating CSV files with AI</h2>
+      <p>
+        Flashcard Trainer includes an AI-ready prompt that helps generate compatible CSV files from training material.
+      </p>
+
+      <p>
+        <button type="button" class="download-link" id="openPromptBtn">View &amp; download AI prompt</button>
+      </p>
+
+      <h3>How to use the prompt</h3>
+      <ol class="steps">
+        <li>Download the prompt file.</li>
+        <li>Paste the prompt text into an AI chat.</li>
+        <li>Replace the <code>[INSERT CONTENT HERE]</code> section with training text, one or more URLs, or both.</li>
+        <li>Ask the AI to generate the CSV output.</li>
+        <li>Save the generated output as a <code>.csv</code> file.</li>
+        <li>Upload the CSV file into Flashcard Trainer.</li>
+      </ol>
+
+      <h3>Source material</h3>
+      <p>You can provide:</p>
+      <ul>
+        <li>Training notes or documentation copied as text.</li>
+        <li>One or more URLs containing the training material.</li>
+        <li>A combination of pasted text and URLs.</li>
+      </ul>
+
+      <p class="note">
+        For URLs, use links to the actual training material pages. A general homepage or landing page is unlikely to produce useful results because the prompt does not ask the AI to recursively crawl an entire website.
+      </p>
+    </section>
+
+    <section id="notes-limitations" class="guide-section">
+      <h2>Notes &amp; limitations</h2>
+
+      <h3>CSV content</h3>
+      <ul>
+        <li>The app expects a CSV file with a header row.</li>
+        <li>The <code>Question</code> and <code>Answer</code> columns are required.</li>
+        <li>Cards with a missing question or answer are ignored.</li>
+        <li>Very large files may take longer to process in the browser.</li>
+      </ul>
+
+      <h3>AI-generated CSV files</h3>
+      <ul>
+        <li>The quality of generated flashcards depends on the quality and completeness of the source material supplied to the AI.</li>
+        <li>Different AI assistants may produce different results from the same prompt.</li>
+        <li>Review AI-generated flashcards before using them for study or assessment.</li>
+      </ul>
+
+      <h3>URL limitations</h3>
+      <ul>
+        <li>Use URLs that point directly to the relevant training content.</li>
+        <li>Provide multiple URLs if the training material spans several pages.</li>
+        <li>Avoid homepages, landing pages, and general navigation pages.</li>
+        <li>The prompt does not instruct the AI to recursively explore or crawl an entire website.</li>
+        <li>Some AI assistants may be unable to access URLs that require authentication, subscriptions, VPN access, or organisational permissions.</li>
+      </ul>
+    </section>
+
+    <section id="faq" class="guide-section faq-section">
+      <h2>FAQ</h2>
+
+      <details>
+        <summary>What CSV columns are required?</summary>
+        <p>The required columns are <code>Question</code> and <code>Answer</code>. You can also include <code>Category</code> and distractor columns for multi-choice mode.</p>
+      </details>
+
+      <details>
+        <summary>Do column names have to use exact capitalisation?</summary>
+        <p>No. Column names are matched without case sensitivity, so <code>Question</code>, <code>question</code>, and <code>QUESTION</code> are treated the same.</p>
+      </details>
+
+      <details>
+        <summary>How do I create a CSV file using AI?</summary>
+        <p>Download the AI prompt from the Generating CSV files with AI section, paste it into an AI chat, add your training material, and save the generated output as a CSV file.</p>
+      </details>
+
+      <details>
+        <summary>What source material can I provide to the AI?</summary>
+        <p>You can provide pasted training text, one or more URLs, or a combination of both.</p>
+      </details>
+
+      <details>
+        <summary>Can I provide multiple URLs?</summary>
+        <p>Yes. Use multiple URLs when the training material is spread across several specific pages.</p>
+      </details>
+
+      <details>
+        <summary>Can I provide only a website homepage?</summary>
+        <p>No. For best results, provide URLs for the actual training material pages. The prompt does not ask the AI to recursively crawl an entire website from a homepage.</p>
+      </details>
+
+      <details>
+        <summary>Why did the AI generate poor or incomplete results?</summary>
+        <p>The source material may be incomplete, the URLs may be inaccessible, or the URLs may point to general navigation pages rather than actual training content.</p>
+      </details>
+
+      <details>
+        <summary>Should I review AI-generated flashcards?</summary>
+        <p>Yes. Review AI-generated flashcards before using them, especially if the material is important or used for assessment.</p>
+      </details>
+    </section>
+  </main>
+  <script type="text/plain" id="promptContent">
+# Flashcard &amp; Multiple-Choice Question Generator
+
+You are a training-content flashcard and assessment generator.
+
+You will be given one or more URLs and/or pasted training material.
+
+Analyse all accessible instructional content as a single unified course and generate high-quality flashcard question-answer pairs supplemented with multiple-choice distractor answers in strict CSV format.
+
+Your goal is to create flashcards that are:
+
+- Source-grounded
+- Learning-focused
+- Concise and self-contained
+- Non-duplicative
+- Optimised for active recall
+- Meaningful when reviewed in random order
+- Suitable for both flashcard and multiple-choice learning
+
+---
+
+# Core Principles
+
+## Source-Grounded Correct Answers
+
+Every Question and Answer pair must be explicitly supported by the source.
+
+Do not:
+
+- Guess
+- Infer unstated conclusions
+- Introduce unsupported facts
+- Add external knowledge to correct answers
+
+## Learning Value
+
+Include only content that improves:
+
+- Understanding
+- Recall
+- Application
+- Decision making
+
+Exclude:
+
+- Trivia
+- Administrative details
+- Marketing language
+- Boilerplate
+- Low-value facts
+
+## One Objective Per Card
+
+Each flashcard must test exactly one concept, such as:
+
+- Definition
+- Rule
+- Condition
+- Decision criterion
+- Relationship
+- Comparison
+- Constraint
+- Exception
+
+## Question&#8212;Answer Alignment
+
+The question and answer must match in scope exactly.
+
+## Self-Contained
+
+Each card must make sense independently without requiring context from other cards.
+
+## Concise but Complete
+
+Use the minimum wording necessary for clarity and correctness.
+
+## Non-Duplicative
+
+Avoid generating multiple cards that test essentially the same knowledge.
+
+## Avoid Tautologies and Circular Answers
+
+Do not create cards where:
+
+- The answer simply restates the question
+- The answer is merely a negation of the question
+- The answer repeats the same concept using nearly identical wording
+
+If the source only supports such content, prefer:
+
+- Distinction-based questions
+- Conditional questions
+- Contextual clarification questions
+
+Otherwise omit the card.
+
+---
+
+# Content Processing
+
+Treat all provided sources as one unified body of instructional content.
+
+Ignore:
+
+- Navigation menus
+- Advertisements
+- Legal notices
+- Boilerplate text
+- Decorative content
+
+Focus on:
+
+- Definitions
+- Concepts
+- Rules
+- Procedures
+- Relationships
+- Conditions
+- Constraints
+- Decision criteria
+- Exceptions
+
+Extract useful information from:
+
+- Tables
+- Lists
+- Diagrams
+- Structured content
+
+---
+
+# Flashcard Generation
+
+Generate cards only from meaningful instructional content.
+
+## Prioritise
+
+- Core concepts
+- Conditions and constraints
+- Exceptions and edge cases
+- Decision points
+- Cause-effect relationships
+- Comparisons and distinctions
+- Process outcomes
+- Limitations
+- Best practices
+
+## Avoid
+
+- Decorative examples
+- Repetition
+- Administrative instructions
+- Content with little learning value
+
+---
+
+# Active Recall Optimisation
+
+Prefer questions that require retrieval.
+
+Examples:
+
+- What is the purpose of X?
+- When should X be used?
+- Under what condition does X occur?
+- How does X differ from Y?
+- What is a key limitation of X?
+- What outcome results from X?
+- Which condition must be met before X?
+
+Avoid:
+
+- True/False questions
+- Leading questions
+- Questions that reveal the answer
+- Fill-in-the-blank formats that provide excessive clues
+
+---
+
+# Question Quality
+
+Questions must:
+
+- Be clear and specific
+- Stand alone
+- Identify the exact concept being tested
+- Avoid ambiguous wording
+- Avoid vague references such as:
+  - this
+  - it
+  - they
+  - that process
+
+Use the narrowest wording that uniquely identifies the answer.
+
+For lists:
+
+- Either test the entire list when educationally meaningful
+- Or test a clearly defined individual item
+
+---
+
+# Option Quality
+
+The following quality requirements apply to all answer options:
+
+- Answer
+- Distractor-1
+- Distractor-2
+- Distractor-3
+
+Every option must be:
+
+- Self-contained
+- Concise but precise
+- Grammatically correct
+- Similar in style and specificity
+- Similar in complexity
+- Similar in length where practical
+- Free of unnecessary wording
+- Clearly distinguishable from other options
+
+Avoid options that:
+
+- Are circular
+- Repeat the question
+- Contain humour
+- Contain nonsense
+- Contain placeholders
+- Are obviously incorrect on sight
+
+---
+
+# Correct Answer Requirements
+
+The Answer field must:
+
+- Fully satisfy the question
+- Be explicitly supported by the source
+- Be factually correct according to the source
+- Be concise yet complete
+- Clearly distinguish the concept from alternatives
+
+---
+
+# Distractor Generation
+
+Generate exactly three distractor answers:
+
+- Distractor-1
+- Distractor-2
+- Distractor-3
+
+Distractors must satisfy all Option Quality requirements.
+
+Distractors must:
+
+- Be plausible to someone who has studied the material
+- Reflect realistic misconceptions or competing concepts
+- Use terminology consistent with the subject matter
+- Match the style and specificity of the correct answer
+- Challenge a knowledgeable learner
+- Be clearly incorrect for the specific question
+
+Distractors must not:
+
+- Duplicate each other
+- Duplicate the correct answer
+- Be partially correct
+- Be technically correct under another interpretation
+- Be simple negations of the correct answer
+- Differ only by wording
+- Be absurd or unrelated
+
+---
+
+# Distractor Knowledge Sources
+
+Correct answers must always be source-grounded.
+
+Distractors may be generated using the following priority:
+
+1. Related concepts found in the source
+2. Related concepts inferred from the source domain
+3. General subject-matter knowledge
+
+When suitable distractors do not exist in the source, create plausible distractors using broader knowledge of the subject.
+
+However:
+
+- The source remains authoritative
+- Distractors must never create alternative correct answers
+- Distractors must not contradict the intended learning objective
+- There must always be exactly one correct answer
+
+---
+
+# Procedures
+
+For workflows and processes, prioritise:
+
+- Purpose
+- Preconditions
+- Key decisions
+- Outcomes
+- Constraints
+
+Avoid memorisation of arbitrary step numbers unless pedagogically important.
+
+---
+
+# Final Validation
+
+Before producing output:
+
+## Coverage Validation
+
+Ensure major topics are covered proportionally.
+
+Remove:
+
+- Duplicates
+- Near-duplicates
+- Weak cards
+- Low-value content
+
+## Question Validation
+
+Verify each question:
+
+- Tests exactly one objective
+- Is clear
+- Is self-contained
+- Supports active recall
+
+## Correct Answer Validation
+
+Verify the correct answer:
+
+- Is source-grounded
+- Is correct
+- Fully satisfies the question
+
+## Distractor Validation
+
+Verify:
+
+- Exactly three distractors exist
+- All distractors are incorrect
+- No distractor is partially correct
+- No distractor could reasonably be interpreted as correct
+- No distractor duplicates another distractor
+- No distractor duplicates the correct answer
+
+## Multiple-Choice Validation
+
+Verify:
+
+- Exactly one answer option is correct
+- A knowledgeable learner would identify the correct answer
+- The correct option cannot be identified solely through:
+  - Length
+  - Formatting
+  - Specificity
+  - Writing style
+
+---
+
+# Output Format
+
+If any source is inaccessible:
+
+- Output a brief note identifying the source and reason
+- Do not speculate about inaccessible content
+
+Then output flashcards as CSV:
+
+"Category","Question","Answer","Distractor-1","Distractor-2","Distractor-3"
+
+## CSV Rules
+
+- Exactly 6 columns per row
+- Wrap every field in double quotes
+- Escape internal quotes by doubling them
+- Replace line breaks with spaces
+- No markdown
+- No code blocks
+- No commentary
+- No blank lines
+- One flashcard per row
+
+If no valid flashcards can be generated:
+
+Output only the explanatory note.
+
+---
+
+# Source(s)
+
+[INSERT CONTENT HERE]
+
+
+-------------------
+© 2026 Igor Gorinov
+  </script>
+  <dialog id="promptDialog" class="prompt-dialog" aria-labelledby="promptDialogTitle">
+    <div class="prompt-dialog-header">
+      <h2 id="promptDialogTitle">AI Prompt</h2>
+      <div class="prompt-dialog-actions">
+        <a id="promptDownloadBtn" class="prompt-download-btn" download="FlashcardTrainer_prompt.txt">Download</a>
+        <button type="button" id="closePromptBtn" class="prompt-close-btn" aria-label="Close prompt">&times;</button>
+      </div>
+    </div>
+    <div class="prompt-dialog-body">
+      <pre id="promptText" class="prompt-text">Loading&hellip;</pre>
+    </div>
+  </dialog>
+  <script>
+    (function () {
+      const dialog = document.getElementById('promptDialog');
+      const openBtn = document.getElementById('openPromptBtn');
+      const closeBtn = document.getElementById('closePromptBtn');
+      const promptText = document.getElementById('promptText');
+      const downloadBtn = document.getElementById('promptDownloadBtn');
+      let blobUrl = null;
+
+      openBtn.addEventListener('click', function () {
+        if (!blobUrl) {
+          const text = document.getElementById('promptContent').textContent.trim();
+          promptText.textContent = text;
+          blobUrl = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+          downloadBtn.href = blobUrl;
+        }
+        dialog.showModal();
+      });
+
+      closeBtn.addEventListener('click', function () { dialog.close(); });
+
+      dialog.addEventListener('click', function (e) {
+        if (e.target === dialog) { dialog.close(); }
+      });
+    }());
+  </script>
 </body>
 </html>
