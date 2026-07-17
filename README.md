@@ -152,6 +152,7 @@ Live Server in VS Code is also supported for local testing.
 .  
 |-- index.html            # Main application shell  
 |-- disclaimer.html       # Disclaimer page shown in dialog iframe  
+|-- images/ 
 |-- ai-prompts/  
 |   |-- FlashcardTrainer_prompt.txt  # Shared AI prompt source used by the user guide  
 |-- css/  
@@ -159,14 +160,13 @@ Live Server in VS Code is also supported for local testing.
 |-- documentation/  
 |   |-- user-guide.html   # User guide shown in dialog iframe  
 |-- js/  
-|   |-- main.js           # App bootstrap  
-|   |-- constants.js      # Shared enums, labels, and static text  
-|   |-- state.js          # Mutable app state and state reset helpers  
-|   |-- dom.js            # Required DOM element lookup  
-|   |-- csvParser.js      # CSV parser and card extraction  
-|   |-- navigation.js     # Order creation, shuffling, visibility checks  
-|   |-- ui.js             # Event wiring and UI orchestration  
-|-- images/  
+    |-- main.js           # App bootstrap  
+    |-- constants.js      # Shared enums, labels, and static text  
+    |-- state.js          # Mutable app state and state reset helpers  
+    |-- dom.js            # Required DOM element lookup  
+    |-- csvParser.js      # CSV parser and card extraction  
+    |-- navigation.js     # Order creation, shuffling, visibility checks  
+    |-- ui.js             # Event wiring and UI orchestration  
 ```
 
 ## Browser Support Notes
