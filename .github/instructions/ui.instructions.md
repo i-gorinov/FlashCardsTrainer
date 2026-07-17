@@ -1,6 +1,6 @@
 ---
 description: 'UI, DOM, and event-handling rules for the Flashcard Trainer project.'
-applyTo: 'js/ui.js, js/dom.js, index.html, styles.css'
+applyTo: 'js/ui.js, js/dom.js, index.html, css/styles.css'
 ---
 
 # UI and DOM Instructions

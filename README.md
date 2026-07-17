@@ -146,8 +146,11 @@ Then open http://localhost:8080.
 ```text
 .  
 |-- index.html            # Main application shell  
-|-- styles.css            # App styling and responsive layout  
 |-- disclaimer.html       # Disclaimer page shown in dialog iframe  
+|-- css/  
+|   |-- styles.css        # App styling and responsive layout  
+|-- documentation/  
+|   |-- user-guide.html   # User guide shown in dialog iframe  
 |-- js/  
 |   |-- main.js           # App bootstrap  
 |   |-- constants.js      # Shared enums, labels, and static text  

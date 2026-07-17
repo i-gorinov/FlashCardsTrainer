@@ -58,15 +58,6 @@ h1 {
   color: var(--muted);
   font-size: 1.05rem;
 }
-.header-meta {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 16px;
-  color: var(--muted);
-  font-size: .92rem;
-}
 .toc {
   position: sticky;
   top: 0;
