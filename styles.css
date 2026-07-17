@@ -688,6 +688,15 @@ button:disabled,input:disabled+span {
     #nextBtn {
         grid-area:auto;
     }
+
+    .flashcard-front:has(#multiChoiceOptions:not([hidden])) h2 {
+        display:none;
+    }
+
+    .flashcard-front:has(#multiChoiceOptions:not([hidden])) #questionText::before {
+        content:"Q: ";
+        font-weight:700;
+    }
 }
 
 @media(max-width:600px) {
