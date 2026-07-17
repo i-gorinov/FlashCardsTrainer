@@ -754,6 +754,18 @@ button:disabled,input:disabled+span {
         text-align:center
     }
 
+    .app-footer .copyright {
+        order:3
+    }
+
+    .app-footer .user-guide-link {
+        order:1
+    }
+
+    .app-footer #disclaimerLink {
+        order:2
+    }
+
 }
 
 @media(max-width:480px) {
