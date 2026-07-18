@@ -142,13 +142,13 @@
       </p>
 
       <p>
-        <button type="button" class="download-link" id="openPromptBtn">View &amp; download AI prompt</button>
+        <button type="button" class="download-link" id="openPromptBtn">View AI prompt</button>
       </p>
 
       <h3>How to use the prompt</h3>
       <ol class="steps">
-        <li>Download the prompt file.</li>
-        <li>Paste the prompt text into an AI chat.</li>
+        <li>Open the AI prompt dialog.</li>
+        <li>Copy the prompt text into an AI chat, or download the prompt file on larger screens if you prefer.</li>
         <li>Replace the <code>[INSERT CONTENT HERE]</code> section with training text, one or more URLs, or both.</li>
         <li>Ask the AI to generate the CSV output.</li>
         <li>Save the generated output as a <code>.csv</code> file.</li>
@@ -244,6 +244,18 @@
     <div class="prompt-dialog-header">
       <h2 id="promptDialogTitle">AI Prompt</h2>
       <div class="prompt-dialog-actions">
+        <button type="button" id="promptCopyBtn" class="prompt-copy-btn" data-copied="false" aria-label="Copy AI prompt">
+          <span class="prompt-copy-icon" aria-hidden="true">
+            <svg class="prompt-copy-icon-clipboard" viewBox="0 0 24 24" focusable="false">
+              <rect x="9" y="9" width="11" height="11" rx="2"></rect>
+              <path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"></path>
+            </svg>
+            <svg class="prompt-copy-icon-check" viewBox="0 0 24 24" focusable="false">
+              <path d="M5 12.5 9.2 16.7 19 7"></path>
+            </svg>
+          </span>
+          <span class="prompt-copy-label">Copy</span>
+        </button>
         <a id="promptDownloadBtn" class="prompt-download-btn" download="FlashcardTrainer_prompt.txt">Download</a>
         <button type="button" id="closePromptBtn" class="prompt-close-btn" aria-label="Close prompt">&times;</button>
       </div>
@@ -251,46 +263,119 @@
     <div class="prompt-dialog-body">
       <pre id="promptText" class="prompt-text">Loading&hellip;</pre>
     </div>
+    <p id="promptCopyStatus" class="prompt-copy-status" aria-live="polite"></p>
   </dialog>
   <script>
     (function () {
+      const MOBILE_VIEWPORT_MAX_WIDTH = 760;
       const dialog = document.getElementById("promptDialog");
       const openBtn = document.getElementById("openPromptBtn");
       const closeBtn = document.getElementById("closePromptBtn");
+      const copyBtn = document.getElementById("promptCopyBtn");
       const promptText = document.getElementById("promptText");
       const downloadBtn = document.getElementById("promptDownloadBtn");
+      const copyStatus = document.getElementById("promptCopyStatus");
       const promptUrl = "../ai-prompts/FlashcardTrainer_prompt.txt";
       let promptContent = "";
+      let copiedStateTimeoutId = 0;
 
       downloadBtn.href = promptUrl;
 
-      openBtn.addEventListener("click", async function () {
-        dialog.showModal();
+      function getAppViewportWidth() {
+        try {
+          return window.top.innerWidth;
+        } catch (error) {
+          return window.innerWidth;
+        }
+      }
 
+      function updatePromptViewportMode() {
+        const viewportWidth = getAppViewportWidth();
+        document.body.dataset.appViewport = viewportWidth <= MOBILE_VIEWPORT_MAX_WIDTH ? "mobile" : "desktop";
+      }
+
+      async function ensurePromptLoaded() {
         if (promptContent) {
           promptText.textContent = promptContent;
-          return;
+          return promptContent;
         }
 
         promptText.textContent = "Loading...";
 
+        const response = await fetch(promptUrl);
+
+        if (!response.ok) {
+          throw new Error("Failed to load AI prompt file.");
+        }
+
+        promptContent = (await response.text()).trim();
+        promptText.textContent = promptContent;
+        return promptContent;
+      }
+
+      function clearCopiedState() {
+        if (copiedStateTimeoutId) {
+          window.clearTimeout(copiedStateTimeoutId);
+          copiedStateTimeoutId = 0;
+        }
+
+        copyBtn.dataset.copied = "false";
+        copyBtn.setAttribute("aria-label", "Copy AI prompt");
+        copyBtn.querySelector(".prompt-copy-label").textContent = "Copy";
+        copyStatus.textContent = "";
+      }
+
+      function showCopiedState() {
+        clearCopiedState();
+        copyBtn.dataset.copied = "true";
+        copyBtn.setAttribute("aria-label", "AI prompt copied");
+        copyBtn.querySelector(".prompt-copy-label").textContent = "Copied";
+        copyStatus.textContent = "AI prompt copied to clipboard.";
+        copiedStateTimeoutId = window.setTimeout(clearCopiedState, 2000);
+      }
+
+      updatePromptViewportMode();
+
+      window.addEventListener("resize", updatePromptViewportMode);
+
+      try {
+        if (window.top !== window) {
+          window.top.addEventListener("resize", updatePromptViewportMode);
+        }
+      } catch (error) {
+        // Ignore cross-window access issues and fall back to the local viewport.
+      }
+
+      openBtn.addEventListener("click", async function () {
+        dialog.showModal();
+
         try {
-          const response = await fetch(promptUrl);
-
-          if (!response.ok) {
-            throw new Error("Failed to load AI prompt file.");
-          }
-
-          promptContent = (await response.text()).trim();
-          promptText.textContent = promptContent;
+          await ensurePromptLoaded();
         } catch (error) {
           promptText.textContent = "Unable to load the AI prompt file. Serve the site through Live Server or another static server and try again.";
         }
       });
 
+      copyBtn.addEventListener("click", async function () {
+        copyBtn.disabled = true;
+
+        try {
+          const content = await ensurePromptLoaded();
+          await navigator.clipboard.writeText(content);
+          showCopiedState();
+        } catch (error) {
+          copyStatus.textContent = "Unable to copy the AI prompt.";
+        } finally {
+          copyBtn.disabled = false;
+        }
+      });
+
       closeBtn.addEventListener("click", function () {
+        clearCopiedState();
         dialog.close();
       });
+
+      dialog.addEventListener("close", clearCopiedState);
 
       dialog.addEventListener("click", function (event) {
         if (event.target === dialog) {

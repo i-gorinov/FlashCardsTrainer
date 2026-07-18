@@ -364,22 +364,87 @@ th {
   gap: 10px;
 }
 
+.prompt-copy-btn,
 .prompt-download-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 108px;
+  min-height: 38px;
   padding: 7px 14px;
   background: var(--accent);
   color: #fff;
+  border: 0;
   border-radius: 8px;
   font-size: .9rem;
   font-weight: 700;
+  line-height: 1.2;
   text-decoration: none;
+  cursor: pointer;
 }
 
+.prompt-copy-btn:disabled {
+  cursor: wait;
+  opacity: .85;
+}
+
+.prompt-copy-btn:hover,
+.prompt-copy-btn:focus,
 .prompt-download-btn:hover,
 .prompt-download-btn:focus {
   background: var(--accent-dark);
   color: #fff;
   text-decoration: none;
+}
+
+.prompt-copy-icon {
+  display: none;
+  width: 16px;
+  height: 16px;
+}
+
+.prompt-copy-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.prompt-copy-icon-clipboard,
+.prompt-copy-icon-check {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.prompt-copy-icon-check {
+  display: none;
+}
+
+.prompt-copy-btn[data-copied="true"] .prompt-copy-icon-clipboard {
+  display: none;
+}
+
+.prompt-copy-btn[data-copied="true"] .prompt-copy-icon-check {
+  display: block;
+}
+
+.prompt-copy-label {
+  display: inline-block;
+  min-width: 48px;
+}
+
+.prompt-copy-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
 .prompt-close-btn {
@@ -409,4 +474,39 @@ th {
   word-break: break-word;
   font-size: .88rem;
   line-height: 1.5;
+}
+
+body[data-app-viewport="mobile"] .prompt-download-btn {
+  display: none;
+}
+
+body[data-app-viewport="mobile"] .prompt-copy-btn {
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+body[data-app-viewport="mobile"] .prompt-copy-icon {
+  display: inline-flex;
+}
+
+body[data-app-viewport="mobile"] .prompt-copy-label {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .prompt-dialog {
+    width: calc(100vw - 20px);
+    height: min(640px, calc(100vh - 20px));
+  }
+
+  .prompt-dialog-header {
+    padding: 12px;
+  }
+
+  .prompt-dialog-actions {
+    gap: 8px;
+  }
 }
