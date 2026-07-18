@@ -1,4 +1,5 @@
 let elements;
+let isPromptDialogOpen = false;
 function initializeApp() {
   elements = getElements();
   wireEvents();
@@ -25,6 +26,8 @@ function wireEvents() {
   elements.userGuideLink.addEventListener("click", handleUserGuideLinkClick);
   elements.closeUserGuideBtn.addEventListener("click", closeUserGuide);
   elements.userGuideDialog.addEventListener("click", handleUserGuideBackdropClick);
+  elements.userGuideDialog.addEventListener("cancel", handleUserGuideCancel);
+  window.addEventListener("message", handleIframeMessage);
   window.addEventListener("resize", handleViewportResize);
 }
 async function handleFileUpload(event) {
@@ -290,8 +293,23 @@ function handleDisclaimerLinkClick(event) { if (!elements.disclaimerDialog.showM
 function closeDisclaimer() { elements.disclaimerDialog.close(); }
 function handleDisclaimerBackdropClick(event) { if (event.target === elements.disclaimerDialog) closeDisclaimer(); }
 function handleUserGuideLinkClick(event) { if (!elements.userGuideDialog.showModal) return; event.preventDefault(); elements.userGuideDialog.showModal(); }
-function closeUserGuide() { elements.userGuideDialog.close(); }
+function closeUserGuide() { if (isPromptDialogOpen) return; elements.userGuideDialog.close(); }
 function handleUserGuideBackdropClick(event) { if (event.target === elements.userGuideDialog) closeUserGuide(); }
+function handleUserGuideCancel(event) { if (isPromptDialogOpen) event.preventDefault(); }
+function handleIframeMessage(event) {
+  if (event.source !== elements.userGuideFrame.contentWindow) return;
+  if (event.data?.type === "flashcardPromptDialogOpened") {
+    isPromptDialogOpen = true;
+    elements.closeUserGuideBtn.disabled = true;
+    elements.closeUserGuideBtn.setAttribute("aria-label", "Close user guide (close the AI Prompt first)");
+    elements.closeUserGuideBtn.setAttribute("title", "Close the AI Prompt first");
+  } else if (event.data?.type === "flashcardPromptDialogClosed") {
+    isPromptDialogOpen = false;
+    elements.closeUserGuideBtn.disabled = false;
+    elements.closeUserGuideBtn.setAttribute("aria-label", "Close user guide");
+    elements.closeUserGuideBtn.removeAttribute("title");
+  }
+}
 function revealRenderedText() {
   elements.status.classList.remove("is-pending-render");
   elements.questionText.classList.remove("is-pending-render");

@@ -612,6 +612,11 @@ button:disabled,input:disabled+span {
     line-height:1
 }
 
+.dialog-close-btn:disabled {
+    opacity:.4;
+    cursor:not-allowed
+}
+
 .multi-choice-options {
     text-align:left;
     width:min(90%,100%);
