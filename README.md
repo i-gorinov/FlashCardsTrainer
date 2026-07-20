@@ -18,7 +18,7 @@ It runs fully client-side with no backend and no build step.
 - Discover AI deck creation directly from the empty card state.
 - Use a guided AI deck creation dialog with a three-step quick-start workflow.
 - Create and save CSV files directly in the app by pasting AI-generated output, including on mobile devices.
-- View, copy, and on larger screens download the AI CSV-generation prompt from a shared text file.
+- View and copy the AI CSV-generation prompt from a shared text file.
 
 ## How It Works
 
@@ -51,7 +51,7 @@ The AI deck dialog provides:
 
 The AI prompt uses the same shared prompt source and preserves responsive behavior:
 
-- Desktop and tablet: Copy and Download options remain available.
+- Desktop and tablet: Copy option remains available.
 - Mobile: Copy option only.
 - Prompt content loads from `ai-prompts/FlashcardTrainer_prompt.txt`.
 

@@ -159,7 +159,6 @@
       <p>Click <strong>Open AI Prompt</strong> to view the prompt template that guides your AI assistant.</p>
       <ul>
         <li>Copy the prompt text directly into your AI chat.</li>
-        <li>On larger screens, you can download the prompt file if you prefer.</li>
       </ul>
 
       <h4>Step 2: Generate CSV output</h4>
@@ -289,7 +288,6 @@
           </span>
           <span class="prompt-copy-label">Copy</span>
         </button>
-        <a id="promptDownloadBtn" class="prompt-download-btn" download="FlashcardTrainer_prompt.txt">Download</a>
         <button type="button" id="closePromptBtn" class="prompt-close-btn" aria-label="Close prompt">&times;</button>
       </div>
     </div>
@@ -306,13 +304,10 @@
       const closeBtn = document.getElementById("closePromptBtn");
       const copyBtn = document.getElementById("promptCopyBtn");
       const promptText = document.getElementById("promptText");
-      const downloadBtn = document.getElementById("promptDownloadBtn");
       const copyStatus = document.getElementById("promptCopyStatus");
       const promptUrl = "../ai-prompts/FlashcardTrainer_prompt.txt";
       let promptContent = "";
       let copiedStateTimeoutId = 0;
-
-      downloadBtn.href = promptUrl;
 
       function getAppViewportWidth() {
         try {

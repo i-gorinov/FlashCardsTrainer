@@ -10,7 +10,6 @@ function initializeApp() {
   elements = getElements();
   isUserGuideFrameLoaded = Boolean(elements.userGuideFrame.contentDocument && elements.userGuideFrame.contentDocument.readyState === "complete");
   updateAiPromptViewportMode();
-  elements.aiPromptDownloadBtn.href = AI_PROMPT_URL;
   wireEvents();
   state.mode = Mode.SEQUENTIAL;
   setReviewControlsEnabled(false);
@@ -392,7 +391,6 @@ function showAiPromptCopiedState() {
 }
 async function openAiPromptDialog() {
   updateAiPromptViewportMode();
-  elements.aiPromptDownloadBtn.href = AI_PROMPT_URL;
   if (!elements.aiPromptDialog.open) elements.aiPromptDialog.showModal();
   try {
     await ensureAiPromptLoaded();

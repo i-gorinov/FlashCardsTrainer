@@ -175,9 +175,7 @@ button:active:not(:disabled) {
     }
 
     .prompt-copy-btn:hover:not(:disabled),
-    .prompt-copy-btn:focus-visible:not(:disabled),
-    .prompt-download-btn:hover,
-    .prompt-download-btn:focus-visible {
+    .prompt-copy-btn:focus-visible:not(:disabled) {
         background:var(--accent-dark);
         color:#fff;
         text-decoration:none;
@@ -819,14 +817,12 @@ p.empty-ai-gap {
 }
 
 .prompt-copy-btn,
-.prompt-download-btn,
 .prompt-close-btn {
     width:auto;
     min-width:unset
 }
 
-.prompt-copy-btn,
-.prompt-download-btn {
+.prompt-copy-btn {
     display:inline-flex;
     align-items:center;
     justify-content:center;
@@ -843,10 +839,6 @@ p.empty-ai-gap {
     background:var(--accent);
     color:#fff;
     cursor:pointer
-}
-
-.prompt-copy-btn {
-    border:0
 }
 
 .prompt-copy-btn:disabled {
@@ -1116,11 +1108,7 @@ p.empty-ai-gap {
         height:calc(100vh - 20px)
     }
 
-    body[data-app-viewport="mobile"] .prompt-download-btn {
-        display:none
-    }
-
-        body[data-app-viewport="mobile"] .prompt-copy-btn {
+    body[data-app-viewport="mobile"] .prompt-copy-btn {
             min-width:36px;
             width:36px;
             height:36px;
