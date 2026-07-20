@@ -458,16 +458,6 @@ button:disabled,input:disabled+span {
     flex:0 0 auto
 }
 
-.csv-example {
-    margin:0;
-    padding:10px 12px;
-    max-width:min(420px,100%);
-    overflow-x:auto;
-    white-space:pre;
-    text-align:left;
-    justify-self:center
-}
-
 .answer-status-indicator {
     position:absolute;
     bottom:14px;

@@ -20,9 +20,4 @@ const ANSWER_STATUS_META = Object.freeze({
   [AnswerStatus.INCORRECT]: { label: "incorrect", symbol: "✗" },
 });
 const EMPTY_CARD_TEXT = "Upload a CSV file to begin.";
-const EMPTY_CSV_EXAMPLE = `CSV content example:
-Question,Answer
-What is HTML?,A markup language for web pages
-What is CSS?,A stylesheet language
-What is JavaScript?,A programming language`;
 const MULTI_CHOICE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

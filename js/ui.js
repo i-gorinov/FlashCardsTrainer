@@ -37,6 +37,7 @@ function wireEvents() {
   elements.userGuideDialog.addEventListener("click", handleUserGuideBackdropClick);
   elements.userGuideDialog.addEventListener("cancel", handleUserGuideCancel);
   elements.userGuideFrame.addEventListener("load", handleUserGuideFrameLoad);
+  elements.csvFormatLinkBtn.addEventListener("click", handleCsvFormatLinkClick);
   elements.openAiDeckCreatorBtn.addEventListener("click", openAiDeckDialog);
   elements.closeAiDeckDialogBtn.addEventListener("click", closeAiDeckDialog);
   elements.aiDeckDialog.addEventListener("click", handleAiDeckDialogBackdropClick);
@@ -237,7 +238,7 @@ function setCardState(cardState) {
   elements.answerHeading.hidden = !isActive;
   elements.resetBtn.hidden = !isActive;
   elements.aiDeckDiscovery.hidden = !isEmpty;
-  elements.csvExample.hidden = !isEmpty;
+  elements.csvFormatLink.hidden = !isEmpty;
 }
 function resetToEmptyState() {
   resetAllState(Mode.SEQUENTIAL);
@@ -251,7 +252,6 @@ function resetToEmptyState() {
   elements.questionCategory.hidden = true;
   elements.questionText.textContent = EMPTY_CARD_TEXT;
   elements.answerText.textContent = EMPTY_CARD_TEXT;
-  elements.csvExample.textContent = EMPTY_CSV_EXAMPLE;
   elements.flashcard.classList.remove("is-flipped");
   setControlsEnabled(false);
   setCardState(CardState.EMPTY);
@@ -316,11 +316,23 @@ function handleDisclaimerLinkClick(event) { if (!elements.disclaimerDialog.showM
 function closeDisclaimer() { elements.disclaimerDialog.close(); }
 function handleDisclaimerBackdropClick(event) { if (event.target === elements.disclaimerDialog) closeDisclaimer(); }
 function handleUserGuideLinkClick(event) { event.preventDefault(); openUserGuideDialog(); }
+function handleCsvFormatLinkClick() { openUserGuideDialog(); scrollUserGuideToSection("csv-format"); }
 function closeUserGuide() { if (isPromptDialogOpen) return; elements.userGuideDialog.close(); }
 function handleUserGuideBackdropClick(event) { if (event.target === elements.userGuideDialog) closeUserGuide(); }
 function handleUserGuideCancel(event) { if (isPromptDialogOpen) event.preventDefault(); }
 function handleUserGuideFrameLoad() { isUserGuideFrameLoaded = true; }
 function openUserGuideDialog() { if (!elements.userGuideDialog.showModal) return; if (!elements.userGuideDialog.open) elements.userGuideDialog.showModal(); }
+function scrollUserGuideToSection(sectionId) {
+  const scrollMessage = { type: "flashcardScrollToSection", sectionId };
+  if (isUserGuideFrameLoaded && elements.userGuideFrame.contentWindow) {
+    elements.userGuideFrame.contentWindow.postMessage(scrollMessage, "*");
+    return;
+  }
+  const scrollOnLoad = () => {
+    if (elements.userGuideFrame.contentWindow) elements.userGuideFrame.contentWindow.postMessage(scrollMessage, "*");
+  };
+  elements.userGuideFrame.addEventListener("load", scrollOnLoad, { once: true });
+}
 function requestOpenPromptInUserGuide() {
   const openPromptMessage = { type: "flashcardOpenPromptDialog" };
   if (isUserGuideFrameLoaded && elements.userGuideFrame.contentWindow) {
@@ -466,5 +478,4 @@ function revealRenderedText() {
   elements.status.classList.remove("is-pending-render");
   elements.questionText.classList.remove("is-pending-render");
   elements.answerText.classList.remove("is-pending-render");
-  elements.csvExample.classList.remove("is-pending-render");
 }
