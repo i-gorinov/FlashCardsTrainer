@@ -18,7 +18,7 @@ function initializeApp() {
   revealRenderedText();
 }
 function wireEvents() {
-  elements.uploadBtn.addEventListener("click", () => elements.csvInput.click());
+  elements.uploadBtn.addEventListener("click", handleUploadBtnClick);
   elements.csvInput.addEventListener("change", handleFileUpload);
   elements.shuffleCardsCheckbox.addEventListener("change", handleShuffleCardsChange);
   elements.multiChoiceCheckbox.addEventListener("change", handleMultiChoiceChange);
@@ -51,10 +51,13 @@ function wireEvents() {
   window.addEventListener("message", handleIframeMessage);
   window.addEventListener("resize", handleViewportResize);
 }
+async function handleUploadBtnClick() {
+  if (!await confirmSessionReset()) return;
+  elements.csvInput.click();
+}
 async function handleFileUpload(event) {
   const file = event.target.files?.[0];
   if (!file) { setSelectedFileName("No file chosen"); return; }
-  if (!await confirmSessionReset()) { event.target.value = ""; return; }
   setSelectedFileName(file.name);
   try {
     updateStatus("Loading CSV...");
