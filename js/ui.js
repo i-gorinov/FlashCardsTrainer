@@ -4,10 +4,14 @@ let isUserGuideFrameLoaded = false;
 let isAiDeckPromptFlowActive = false;
 let aiPromptContent = "";
 let aiPromptCopiedTimeoutId = 0;
+let navigationFilterCheckboxes = [];
+let isMobileViewportResult = false;
 const AI_PROMPT_URL = "ai-prompts/FlashcardTrainer_prompt.txt";
 const MOBILE_PROMPT_MAX_WIDTH = 760;
 function initializeApp() {
   elements = getElements();
+  navigationFilterCheckboxes = initializeNavigationFilterCheckboxes();
+  isMobileViewportResult = window.matchMedia("(max-width: 600px)").matches;
   isUserGuideFrameLoaded = Boolean(elements.userGuideFrame.contentDocument && elements.userGuideFrame.contentDocument.readyState === "complete");
   updateAiPromptViewportMode();
   wireEvents();
@@ -27,7 +31,7 @@ function wireEvents() {
   elements.resetBtn.addEventListener("click", handleResetBtnClick);
   elements.flashcard.addEventListener("click", toggleCardFlip);
   elements.answerStatusIndicators.forEach((indicator) => indicator.addEventListener("click", handleAnswerStatusIndicatorClick));
-  getNavigationFilterCheckboxes().forEach((checkbox) => checkbox.addEventListener("change", handleNavigationFilterChange));
+  navigationFilterCheckboxes.forEach((checkbox) => checkbox.addEventListener("change", handleNavigationFilterChange));
   elements.disclaimerLink.addEventListener("click", handleDisclaimerLinkClick);
   elements.closeDisclaimerBtn.addEventListener("click", closeDisclaimer);
   elements.disclaimerDialog.addEventListener("click", handleDisclaimerBackdropClick);
@@ -175,12 +179,14 @@ function renderCurrentCard() {
     }
     const order = state.multiChoiceOptionOrders[state.currentCardIndex];
     const options = [card.answer, ...card.distractors];
-    elements.multiChoiceOptions.textContent = "";
+    const fragment = document.createDocumentFragment();
     order.forEach((optionIndex, i) => {
       const p = document.createElement("p");
       p.textContent = `${MULTI_CHOICE_LETTERS[i]}) ${options[optionIndex]}`;
-      elements.multiChoiceOptions.appendChild(p);
+      fragment.appendChild(p);
     });
+    elements.multiChoiceOptions.textContent = "";
+    elements.multiChoiceOptions.appendChild(fragment);
     elements.multiChoiceOptions.hidden = false;
     const correctPosition = order.indexOf(0);
     elements.answerText.textContent = `${MULTI_CHOICE_LETTERS[correctPosition]}) ${card.answer}`;
@@ -304,20 +310,23 @@ function handleNavigationFilterChange() {
   if (state.sessionStarted && state.currentCardIndex >= 0) updateNavigationControls(true);
 }
 function syncNavigationFilterControls() {
-  const filterCheckboxes = getNavigationFilterCheckboxes();
-  filterCheckboxes.forEach((checkbox) => { checkbox.checked = Boolean(state.navigationFilters[checkbox.dataset.filter]); });
-  const checkedCount = filterCheckboxes.filter((checkbox) => checkbox.checked).length;
-  filterCheckboxes.forEach((checkbox) => {
+  navigationFilterCheckboxes.forEach((checkbox) => { checkbox.checked = Boolean(state.navigationFilters[checkbox.dataset.filter]); });
+  const checkedCount = navigationFilterCheckboxes.filter((checkbox) => checkbox.checked).length;
+  navigationFilterCheckboxes.forEach((checkbox) => {
     const lockedByFilterLimit = checkedCount >= 2 && !checkbox.checked;
     checkbox.dataset.lockedByFilterLimit = String(lockedByFilterLimit);
     checkbox.disabled = state.cards.length === 0 || lockedByFilterLimit;
   });
 }
-function getNavigationFilterCheckboxes() {
-  return [elements.hideCorrectCheckbox, elements.hideIncorrectCheckbox, elements.hideNoMarkCheckbox].map((checkbox, index) => {
+function initializeNavigationFilterCheckboxes() {
+  const checkboxes = [elements.hideCorrectCheckbox, elements.hideIncorrectCheckbox, elements.hideNoMarkCheckbox];
+  checkboxes.forEach((checkbox, index) => {
     checkbox.dataset.filter = ["correct", "incorrect", "noMark"][index];
-    return checkbox;
   });
+  return checkboxes;
+}
+function getNavigationFilterCheckboxes() {
+  return navigationFilterCheckboxes;
 }
 function setReviewControlsEnabled(enabled) {
   elements.shuffleCardsCheckbox.disabled = !enabled;
@@ -332,8 +341,11 @@ function updateStatus(message, isHtml = false) {
   }
   elements.status.textContent = message;
 }
-function isMobileViewport() { return window.matchMedia("(max-width: 600px)").matches; }
+function isMobileViewport() {
+  return isMobileViewportResult;
+}
 function handleViewportResize() {
+  isMobileViewportResult = window.matchMedia("(max-width: 600px)").matches;
   if (state.cardState === CardState.ACTIVE && state.cards.length > 0) {
     const status = formatProgressText();
     updateStatus(status.message, status.isHtml);
