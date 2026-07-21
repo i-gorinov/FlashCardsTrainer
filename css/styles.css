@@ -991,6 +991,13 @@ p.empty-ai-gap {
     word-break:break-word
 }
 
+.flashcard-front:has(#multiChoiceOptions:not([hidden])) #multiChoiceOptions {
+    background:rgba(15,118,110,.06);
+    border-radius:8px;
+    padding:8px 10px;
+    margin-top:2px
+}
+
 .disclaimer-frame {
     width:100%;
     height:calc(100% - 69px);
