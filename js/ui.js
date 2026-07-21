@@ -277,8 +277,6 @@ function setCardState(cardState) {
   state.cardState = cardState;
   const isActive = cardState === CardState.ACTIVE;
   const isEmpty = cardState === CardState.EMPTY;
-  elements.questionHeading.hidden = !isActive;
-  elements.answerHeading.hidden = !isActive;
   elements.resetBtn.hidden = !isActive;
   elements.emptyCardView.hidden = !isEmpty;
   elements.questionText.hidden = isEmpty;

@@ -13,6 +13,7 @@ It runs fully client-side with no backend and no build step.
 - Mark answers as correct, incorrect, or unanswered.
 - Filter navigation to hide selected answer categories.
 - View live progress and score details in the status bar.
+- Active flashcards use subtle full-surface question and checkmark watermarks instead of visible side headings.
 - Reset session state at any time, with a confirmation prompt to prevent accidental progress loss.
 - On mobile, the reset control collapses to an icon-only button.
 - Open the Disclaimer in a modal dialog.
