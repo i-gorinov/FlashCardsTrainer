@@ -9,30 +9,37 @@ async function parseCardsFromCsv(csvText) {
   }
 
   const header = nonEmptyRows[0].map(normalizeHeaderCell);
-  const questionIndex = header.indexOf("question");
-  const answerIndex = header.indexOf("answer");
+  const fcQuestionIndex = header.indexOf("fc-question");
+  const fcAnswerIndex = header.indexOf("fc-answer");
   const categoryIndex = header.indexOf("category");
-  const distractorIndices = header.reduce((acc, col, i) => {
-    if (col.startsWith("distractor")) acc.push(i);
-    return acc;
-  }, []);
+  const mcQuestionIndex = header.indexOf("mc-question");
+  const mcAnswerIndex = header.indexOf("mc-answer");
+  const mcDistractorIndices = ["mc-distractor-1", "mc-distractor-2", "mc-distractor-3"]
+    .map((col) => header.indexOf(col))
+    .filter((i) => i !== -1);
 
-  if (questionIndex === -1 || answerIndex === -1) {
-    throw new Error("CSV header must include both 'question' and 'answer' columns.");
+  if (fcQuestionIndex === -1 || fcAnswerIndex === -1) {
+    throw new Error("CSV header must include both 'FC-Question' and 'FC-Answer' columns.");
   }
 
   const cards = [];
 
   for (const row of nonEmptyRows.slice(1)) {
-    const question = (row[questionIndex] || "").trim();
-    const answer = (row[answerIndex] || "").trim();
+    const fcQuestion = (row[fcQuestionIndex] || "").trim();
+    const fcAnswer = (row[fcAnswerIndex] || "").trim();
     const category = categoryIndex === -1 ? "" : (row[categoryIndex] || "").trim();
-    const distractors = distractorIndices.map((i) => (row[i] || "").trim()).filter(Boolean);
+    const mcQuestion = mcQuestionIndex === -1 ? "" : (row[mcQuestionIndex] || "").trim();
+    const mcAnswer = mcAnswerIndex === -1 ? "" : (row[mcAnswerIndex] || "").trim();
+    const mcDistractors = mcDistractorIndices.map((i) => (row[i] || "").trim()).filter(Boolean);
 
-    if (question && answer) {
-      const card = { question, answer };
+    if (fcQuestion && fcAnswer) {
+      const card = { fcQuestion, fcAnswer };
       if (category) card.category = category;
-      if (distractors.length > 0) card.distractors = distractors;
+      if (mcAnswer && mcDistractors.length > 0) {
+        if (mcQuestion) card.mcQuestion = mcQuestion;
+        card.mcAnswer = mcAnswer;
+        card.mcDistractors = mcDistractors;
+      }
       cards.push(card);
     }
   }

@@ -95,7 +95,7 @@ function applyDefaultStudyOptions() {
   elements.multiChoiceCheckbox.checked = false;
 }
 function syncMultiChoiceOptionVisibility() {
-  const hasDistractors = state.cards.some((card) => card.distractors && card.distractors.length > 0);
+  const hasDistractors = state.cards.some((card) => card.mcDistractors && card.mcDistractors.length > 0);
   elements.multiChoiceOption.hidden = !hasDistractors;
 }
 function handleMultiChoiceChange() {
@@ -169,16 +169,16 @@ function renderCurrentCard() {
   const category = (card.category || "").trim();
   elements.questionCategory.textContent = category;
   elements.questionCategory.hidden = !category;
-  elements.questionText.textContent = card.question;
-  const multiChoiceActive = state.multiChoice && card.distractors && card.distractors.length > 0;
+  elements.questionText.textContent = card.fcQuestion;
+  const multiChoiceActive = state.multiChoice && card.mcDistractors && card.mcDistractors.length > 0;
   if (multiChoiceActive) {
     if (!state.multiChoiceOptionOrders[state.currentCardIndex]) {
       state.multiChoiceOptionOrders[state.currentCardIndex] = shuffle(
-        Array.from({ length: 1 + card.distractors.length }, (_, i) => i)
+        Array.from({ length: 1 + card.mcDistractors.length }, (_, i) => i)
       );
     }
     const order = state.multiChoiceOptionOrders[state.currentCardIndex];
-    const options = [card.answer, ...card.distractors];
+    const options = [card.mcAnswer, ...card.mcDistractors];
     const fragment = document.createDocumentFragment();
     order.forEach((optionIndex, i) => {
       const p = document.createElement("p");
@@ -189,10 +189,10 @@ function renderCurrentCard() {
     elements.multiChoiceOptions.appendChild(fragment);
     elements.multiChoiceOptions.hidden = false;
     const correctPosition = order.indexOf(0);
-    elements.answerText.textContent = `${MULTI_CHOICE_LETTERS[correctPosition]}) ${card.answer}`;
+    elements.answerText.textContent = `${MULTI_CHOICE_LETTERS[correctPosition]}) ${card.mcAnswer}`;
   } else {
     elements.multiChoiceOptions.hidden = true;
-    elements.answerText.textContent = card.answer;
+    elements.answerText.textContent = card.fcAnswer;
   }
   elements.flashcard.classList.remove("is-flipped", "is-disabled");
   elements.flashcard.setAttribute("aria-disabled", "false");

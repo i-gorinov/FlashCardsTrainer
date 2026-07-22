@@ -38,25 +38,25 @@
         Flashcard Trainer is a simple browser-based study tool. It reads flashcards from a CSV file and lets you review them one by one.
       </p>
       <p>
-        Each card has a question and an answer. Cards can also include an optional category and optional distractor answers for multi-choice practice.
+        Each card has a flashcard question and answer. Cards can also include an optional category and optional multiple-choice content for MC practice.
       </p>
     </section>
 
     <section id="csv-format" class="guide-section">
       <h2>CSV file format</h2>
       <p>
-        Your CSV file must include a header row and at least one data row. The required columns are <code>Question</code> and <code>Answer</code>.
+        Your CSV file must include a header row and at least one data row. The required columns are <code>FC-Question</code> and <code>FC-Answer</code>.
       </p>
 
       <h3>Required columns</h3>
       <dl class="definition-list">
         <div>
-          <dt><code>Question</code></dt>
-          <dd>The text shown on the front of the flashcard.</dd>
+          <dt><code>FC-Question</code></dt>
+          <dd>The flashcard question shown on the front of the card.</dd>
         </div>
         <div>
-          <dt><code>Answer</code></dt>
-          <dd>The text shown on the back of the flashcard.</dd>
+          <dt><code>FC-Answer</code></dt>
+          <dd>The flashcard answer shown on the back of the card.</dd>
         </div>
       </dl>
 
@@ -67,18 +67,26 @@
           <dd>An optional topic or grouping label shown above the question.</dd>
         </div>
         <div>
-          <dt><code>Distractor...</code></dt>
-          <dd>An incorrect answer option used in multi-choice mode. Any column name starting with "Distractor" is recognized. Any number of distractor columns can be included.</dd>
-        </div>        
+          <dt><code>MC-Question</code></dt>
+          <dd>The multiple-choice question phrasing. Optional; stored for future study mode use.</dd>
+        </div>
+        <div>
+          <dt><code>MC-Answer</code></dt>
+          <dd>The correct answer used in multi-choice mode. Required together with at least one distractor to enable multi-choice for this card.</dd>
+        </div>
+        <div>
+          <dt><code>MC-Distractor-1</code>, <code>MC-Distractor-2</code>, <code>MC-Distractor-3</code></dt>
+          <dd>Incorrect answer options used in multi-choice mode. At least one is required to enable multi-choice for this card.</dd>
+        </div>
       </dl>
 
       <h3>Example</h3>
-      <pre><code>"Category","Question","Answer","Distractor-1","Distractor-2","Distractor-3"
-"Web","What is HTML?","A markup language for web pages","A database language","A web server","An image format"
-"Web","What is CSS?","A stylesheet language","A programming runtime","A browser cache","A network protocol"</code></pre>
+      <pre><code>"Category","FC-Question","FC-Answer","MC-Question","MC-Answer","MC-Distractor-1","MC-Distractor-2","MC-Distractor-3"
+"Web","What is HTML?","A markup language for web pages","Which technology defines the structure of a web page?","HTML","CSS","JavaScript","SQL"
+"Web","What is CSS?","A stylesheet language","Which language controls the visual style of a web page?","CSS","HTML","JavaScript","Python"</code></pre>
 
       <p class="note">
-        Column names are not case-sensitive. Empty rows are ignored. Rows without both a question and an answer are skipped.
+        Column names are not case-sensitive. Empty rows are ignored. Rows without both <code>FC-Question</code> and <code>FC-Answer</code> are skipped. The MC section is only active for a card when both <code>MC-Answer</code> and at least one <code>MC-Distractor</code> column are non-empty.
       </p>
     </section>
 
@@ -88,7 +96,7 @@
         <li>Select <strong>Upload CSV</strong>.</li>
         <li>Choose a CSV file from your device.</li>
         <li>The first card is shown after the file is successfully loaded.</li>
-        <li>If the file cannot be read, check that it includes the required <code>Question</code> and <code>Answer</code> columns.</li>
+        <li>If the file cannot be read, check that it includes the required <code>FC-Question</code> and <code>FC-Answer</code> columns.</li>
       </ol>
     </section>
 
@@ -128,7 +136,7 @@
     <section id="multi-choice" class="guide-section">
       <h2>Multi-choice mode</h2>
       <p>
-        Multi-choice mode is available when at least one card includes distractor columns. When enabled, the front of the card shows the correct answer mixed with the distractors.
+        Multi-choice mode is available when at least one card includes MC-Answer and MC-Distractor columns. When enabled, the front of the card shows the correct MC answer mixed with the distractors.
       </p>
       <p>
         The back of the card shows the correct option. Distractors should be plausible but clearly incorrect for the specific question.
@@ -206,8 +214,8 @@
       <h3>CSV content</h3>
       <ul>
         <li>The app expects a CSV file with a header row.</li>
-        <li>The <code>Question</code> and <code>Answer</code> columns are required.</li>
-        <li>Cards with a missing question or answer are ignored.</li>
+        <li>The <code>FC-Question</code> and <code>FC-Answer</code> columns are required.</li>
+        <li>Cards with a missing FC-Question or FC-Answer are ignored.</li>
         <li>Very large files may take longer to process in the browser.</li>
       </ul>
 

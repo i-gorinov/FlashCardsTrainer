@@ -21,7 +21,7 @@ UI code may:
 
 Preserve support for:
 
-- `question` and `answer` columns
+- `fc-question` and `fc-answer` columns
 - case-insensitive header matching
 - extra columns
 - quoted fields
@@ -34,21 +34,23 @@ Preserve support for:
 The parser should accept headers in any form of capitalisation or lowercase such as:
 
 ```csv
-question,answer
-Question,Answer
-QUESTION,ANSWER
-question,answer,category
+fc-question,fc-answer
+FC-Question,FC-Answer
+FC-QUESTION,FC-ANSWER
+category,fc-question,fc-answer
 ```
 
-The parser must still require both a question column and an answer column.
+The parser must require both an `FC-Question` column and an `FC-Answer` column.
 
-The category column is optional
+The `Category`, `MC-Question`, `MC-Answer`, and `MC-Distractor-1/2/3` columns are optional.
 
 ## Row Rules
 
-Skip rows that do not contain both a usable question and a usable answer.
+Skip rows that do not contain both a usable `FC-Question` and `FC-Answer`.
 
 Do not create partial flashcards.
+
+The MC section (`MC-Answer`, `MC-Distractor-*`) is only stored on a card when both `MC-Answer` and at least one `MC-Distractor` column are non-empty. Partial MC data is silently discarded.
 
 ## Dependencies
 

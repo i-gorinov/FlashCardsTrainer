@@ -5,9 +5,9 @@ It runs fully client-side with no backend and no build step.
 
 ## Highlights
 
-- Upload a CSV deck with Question and Answer columns.
+- Upload a CSV deck with FC-Question and FC-Answer columns.
 - Optionally include a Category column shown on the question side.
-- Optionally include Distractor columns to enable the multi-choice mode.
+- Optionally include MC-Answer and MC-Distractor columns to enable multi-choice mode.
 - Flip cards by clicking the card.
 - Optional shuffle mode with no repeated cards in one run.
 - Mark answers as correct, incorrect, or unanswered.
@@ -28,7 +28,7 @@ It runs fully client-side with no backend and no build step.
 2. Click Upload CSV and choose a file.
 3. Review starts in scoring mode with Shuffle cards enabled by default.
 4. Optionally toggle Shuffle cards. If a session is in progress, a confirmation dialog appears before the session resets.
-5. Check Multi-choice (if the CSV contains Distractor columns) to display shuffled lettered answer options on the question side.
+5. Check Multi-choice (if the CSV contains MC-Answer and MC-Distractor columns) to display shuffled lettered answer options on the question side.
 6. Navigate cards with Previous and Next.
 7. Click the card to flip between question and answer.
 8. Click the status indicator on the back side to cycle through:
@@ -63,33 +63,33 @@ The AI prompt uses the same shared prompt source and preserves responsive behavi
 
 ## CSV Format
 
-The CSV parser expects:
+Each row represents a single knowledge point. The CSV parser expects:
 
 - A header row.
 - At least one data row.
-- Header names containing both question and answer (case-insensitive).
-- An optional category header (case-insensitive) for question-side display.
-- Optional columns whose header starts with `Distractor` (case-insensitive) to enable multi-choice mode.
+- `FC-Question` and `FC-Answer` columns (case-insensitive) — both required.
+- An optional `Category` column (case-insensitive) for question-side display.
+- Optional `MC-Question`, `MC-Answer`, `MC-Distractor-1`, `MC-Distractor-2`, `MC-Distractor-3` columns (case-insensitive) to enable multi-choice mode per card.
 
-Only rows where both fields are non-empty are imported.
+Only rows where both `FC-Question` and `FC-Answer` are non-empty are imported. The MC section is only stored for a card when `MC-Answer` and at least one `MC-Distractor` column are non-empty.
 
 ### Minimal Example
 
 ```csv
-Question,Answer
+FC-Question,FC-Answer
 What is HTML?,A markup language for web pages
 What is CSS?,A stylesheet language
 What is JavaScript?,A programming language
 ```
 
-### Optional Distractor Example
+### Full Example
 
-Adding one or more columns whose header starts with `Distractor` (case-insensitive) enables multi-choice mode.
+Including all columns enables multi-choice mode for those cards.
 
 ```csv
-Question,Answer,Distractor,Distractor 2,Distractor 3
-What is the capital of France?,Paris,London,Tokyo,Amsterdam
-What language runs in a browser?,JavaScript,Python,Ruby,Go
+Category,FC-Question,FC-Answer,MC-Question,MC-Answer,MC-Distractor-1,MC-Distractor-2,MC-Distractor-3
+Web,What is HTML?,A markup language for web pages,Which technology defines the structure of a web page?,HTML,CSS,JavaScript,SQL
+Web,What is CSS?,A stylesheet language,Which language controls the visual style of a web page?,CSS,HTML,JavaScript,Python
 ```
 
 When Multi-choice is checked:
@@ -101,7 +101,7 @@ When Multi-choice is checked:
 ### Optional Category Example
 
 ```csv
-Answer,category,QUESTION
+FC-Answer,Category,FC-Question
 Paris,Geography,What is the capital of France?
 4,,What is 2+2?
 Pacific Ocean,GEOGRAPHY,Largest ocean?
@@ -119,7 +119,7 @@ When category is present and non-empty, it appears centered at the top of the qu
 ### Validation Errors You May See
 
 - CSV must include a header row and at least one data row.
-- CSV header must include both question and answer columns.
+- CSV header must include both 'FC-Question' and 'FC-Answer' columns.
 - CSV contains an unterminated quoted field.
 - The CSV file does not contain any usable cards.
 
@@ -135,7 +135,7 @@ When category is present and non-empty, it appears centered at the top of the qu
 - Answer state can be cycled from the back-side indicator.
 - Navigation filter checkboxes can hide cards by answer state.
 - At most two hide filters can be active at once.
-- Multi-choice checkbox appears when the CSV contains Distractor columns.
+- Multi-choice checkbox appears when the CSV contains MC-Answer and MC-Distractor columns.
 - When checked, the question side displays the correct answer and all distractors in a shuffled, lettered order that is stable for the session.
 - The answer side shows the correct answer with its assigned letter.
 - Multi-choice is unchecked by default whenever a deck is loaded.
