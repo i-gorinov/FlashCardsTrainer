@@ -209,6 +209,7 @@ Live Server in VS Code is also supported for local testing.
 |   |-- user-guide.html   # User guide shown in dialog iframe  
 |-- js/  
     |-- main.js           # App bootstrap  
+    |-- version.js        # Application version metadata (APP_INFO)  
     |-- constants.js      # Shared enums, labels, and static text  
     |-- state.js          # Mutable app state and state reset helpers  
     |-- dom.js            # Required DOM element lookup  

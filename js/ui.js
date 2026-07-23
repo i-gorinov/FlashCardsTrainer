@@ -14,6 +14,7 @@ const StatusVariant = Object.freeze({
 });
 function initializeApp() {
   elements = getElements();
+  document.getElementById("appVersion").textContent = "v" + APP_INFO.version;
   navigationFilterCheckboxes = initializeNavigationFilterCheckboxes();
   isMobileViewportResult = window.matchMedia("(max-width: 600px)").matches;
   isUserGuideFrameLoaded = Boolean(elements.userGuideFrame.contentDocument && elements.userGuideFrame.contentDocument.readyState === "complete");

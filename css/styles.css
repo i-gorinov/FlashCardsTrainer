@@ -745,6 +745,11 @@ p.empty-ai-gap {
     flex-wrap:wrap
 }
 
+.app-version {
+    opacity:.65;
+    font-size:.8rem
+}
+
 .footer-link {
     color:var(--accent);
     font-weight:600;
@@ -1279,6 +1284,10 @@ p.empty-ai-gap {
 
     .app-footer #disclaimerLink {
         order:2
+    }
+
+    .app-footer .app-version {
+        order:4
     }
 
     .ai-deck-dialog {

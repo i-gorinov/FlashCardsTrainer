@@ -61,3 +61,25 @@ Rules:
 - Never update files under ai-prompts/ as part of a feature implementation.
 - Treat files under ai-prompts/ as read-only reference content.
 - Only modify files under ai-prompts/ if the user explicitly requests a change to a specific file in that folder.
+
+# Versioning and Changelog Maintenance
+
+When implementing changes, always consider whether the change should update `APP_INFO.version` in `js/version.js` and `CHANGELOG.md`.
+
+Update `APP_INFO.version` when the change is intended to be part of a user-facing release.
+
+Use semantic versioning:
+- Increment PATCH for bug fixes, small corrections, and minor user-facing fixes.
+- Increment MINOR for new features, meaningful UI/UX improvements, or backward-compatible user-facing enhancements.
+- Increment MAJOR only for breaking changes, major workflow changes, major redesigns, or changes that significantly alter how users interact with the app.
+
+Whenever `APP_INFO.version` is updated, also update `CHANGELOG.md` under a matching version heading.
+
+`CHANGELOG.md` should:
+- Summarise notable user-facing changes.
+- Group changes under Added, Changed, Fixed, or similar headings where appropriate.
+- Avoid creating one entry for every commit.
+- Avoid documenting purely internal refactoring unless it affects user-facing behaviour.
+- Keep version numbers, dates, and release notes aligned with `APP_INFO.version`.
+
+Do not bump the version for changes that are purely internal, such as formatting, comments, minor code cleanup, or refactoring with no user-facing impact, unless explicitly requested.

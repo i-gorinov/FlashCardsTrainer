@@ -82,7 +82,7 @@
       </section>
     </section>
 
-    <footer class="app-footer"><span class="copyright">© 2026 Igor Gorinov</span><a id="userGuideLink" class="footer-link user-guide-link" href="documentation/user-guide.html">User Guide</a><a id="disclaimerLink" class="footer-link" href="disclaimer.html">Disclaimer</a></footer>
+    <footer class="app-footer"><span class="copyright">© 2026 Igor Gorinov</span><a id="userGuideLink" class="footer-link user-guide-link" href="documentation/user-guide.html">User Guide</a><a id="disclaimerLink" class="footer-link" href="disclaimer.html">Disclaimer</a><span id="appVersion" class="app-version"></span></footer>
   </main>
   <dialog id="sessionResetConfirmDialog" class="confirm-dialog" aria-labelledby="sessionResetConfirmTitle">
     <h2 id="sessionResetConfirmTitle">Session Reset Warning</h2>
@@ -156,6 +156,7 @@
     </div>
     <p id="aiPromptCopyStatus" class="prompt-copy-status" aria-live="polite"></p>
   </dialog>
+  <script defer src="js/version.js"></script>
   <script defer src="js/constants.js"></script>
   <script defer src="js/state.js"></script>
   <script defer src="js/dom.js"></script>
