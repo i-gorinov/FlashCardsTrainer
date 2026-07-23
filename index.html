@@ -12,7 +12,7 @@
     <h1>Flashcard Trainer</h1>
     <div class="status-bar">
       <p id="status" class="status is-pending-render" aria-live="polite"></p>
-      <button id="resetBtn" type="button" disabled aria-label="Reset">
+      <button id="resetBtn" class="btn-secondary" type="button" disabled aria-label="Reset">
         <span class="reset-icon" aria-hidden="true">&#x21ba;</span>
         <span class="reset-label">Reset</span>
       </button>
@@ -45,14 +45,14 @@
         </div>
       </div>
       <div class="card-nav-row">
-          <button id="previousBtn"
-                  class="card-nav"
+            <button id="previousBtn"
+              class="card-nav btn-secondary"
                   type="button"
                   aria-label="Previous card"
                   disabled>❮</button>
 
-          <button id="nextBtn"
-                  class="card-nav"
+            <button id="nextBtn"
+              class="card-nav btn-secondary"
                   type="button"
                   aria-label="Next card"
                   disabled>❯</button>
@@ -61,7 +61,7 @@
 
     <section class="settings-panel" aria-label="Flashcard controls">
       <section class="control-group deck-controls" aria-label="Deck controls">
-        <button id="uploadBtn" type="button" class="upload-btn">Upload CSV</button>
+        <button id="uploadBtn" type="button" class="upload-btn btn-primary">Upload CSV</button>
         <input id="csvInput" class="visually-hidden-input" type="file" accept=".csv,text/csv" />
         <p id="fileName" class="file-name" aria-live="polite">No file chosen</p>
       </section>
@@ -88,27 +88,27 @@
     <h2 id="sessionResetConfirmTitle">Session Reset Warning</h2>
     <p>Current progress and answer marks will be lost.</p>
     <div class="confirm-dialog-actions">
-      <button id="cancelSessionResetBtn" type="button" class="secondary-action-btn">Cancel</button>
-      <button id="okSessionResetBtn" type="button">OK</button>
+      <button id="cancelSessionResetBtn" type="button" class="secondary-action-btn btn-secondary">Cancel</button>
+      <button id="okSessionResetBtn" type="button" class="btn-primary">OK</button>
     </div>
   </dialog>
   <dialog id="disclaimerDialog" class="disclaimer-dialog" aria-labelledby="disclaimerDialogTitle">
-    <div class="disclaimer-dialog-header"><h2 id="disclaimerDialogTitle">Disclaimer</h2><button id="closeDisclaimerBtn" type="button" class="dialog-close-btn" aria-label="Close disclaimer">×</button></div>
+    <div class="disclaimer-dialog-header"><h2 id="disclaimerDialogTitle">Disclaimer</h2><button id="closeDisclaimerBtn" type="button" class="dialog-close-btn btn-icon" aria-label="Close disclaimer">×</button></div>
     <iframe class="disclaimer-frame" src="disclaimer.html" title="Disclaimer content"></iframe>
   </dialog>
   <dialog id="userGuideDialog" class="disclaimer-dialog" aria-labelledby="userGuideTitleTitle">
-    <div class="disclaimer-dialog-header"><h2 id="userGuideTitleTitle">User Guide</h2><button id="closeUserGuideBtn" type="button" class="dialog-close-btn" aria-label="Close user guide">×</button></div>
+    <div class="disclaimer-dialog-header"><h2 id="userGuideTitleTitle">User Guide</h2><button id="closeUserGuideBtn" type="button" class="dialog-close-btn btn-icon" aria-label="Close user guide">×</button></div>
     <iframe class="disclaimer-frame" src="documentation/user-guide.html" title="User guide content"></iframe>
   </dialog>
   <dialog id="aiDeckDialog" class="ai-deck-dialog" aria-labelledby="aiDeckDialogTitle">
-    <div class="disclaimer-dialog-header"><h2 id="aiDeckDialogTitle">Create a Deck with AI</h2><button id="closeAiDeckDialogBtn" type="button" class="dialog-close-btn" aria-label="Close AI deck creator">×</button></div>
+    <div class="disclaimer-dialog-header"><h2 id="aiDeckDialogTitle">Create a Deck with AI</h2><button id="closeAiDeckDialogBtn" type="button" class="dialog-close-btn btn-icon" aria-label="Close AI deck creator">×</button></div>
     <div class="ai-deck-dialog-body">
       <p class="ai-deck-intro">Create a reusable CSV deck in three quick steps, then upload it to start studying. Flashcard fields are required in every row; multiple-choice fields are optional per row.</p>
       <ol class="ai-deck-steps">
         <li>
           <h3>Open the AI Prompt</h3>
           <p>Use the built-in prompt template to guide your AI assistant.</p>
-          <button id="openAiPromptFromDeckBtn" type="button" class="secondary-action-btn">Open AI Prompt</button>
+          <button id="openAiPromptFromDeckBtn" type="button" class="secondary-action-btn btn-secondary">Open AI Prompt</button>
         </li>
         <li>
           <h3>Generate CSV output</h3>
@@ -126,7 +126,7 @@
         <label for="aiCsvContentInput">AI-generated CSV output</label>
         <textarea id="aiCsvContentInput" class="ai-csv-content" placeholder="Topic,Question,Answer,MC-Question,MC-Answer,MC-Distractor-1,MC-Distractor-2,MC-Distractor-3&#10;Web,What is HTML?,A markup language for web pages,,,,,&#10;Web,What is CSS?,A stylesheet language,Which language controls web page styling?,CSS,HTML,JavaScript,Python"></textarea>
         <div class="ai-csv-actions">
-          <button id="saveAiCsvBtn" type="button" class="upload-btn">Save CSV File</button>
+          <button id="saveAiCsvBtn" type="button" class="upload-btn btn-primary">Save CSV File</button>
           <p id="aiCsvSaveStatus" class="ai-csv-save-status" aria-live="polite"></p>
         </div>
       </section>
@@ -136,7 +136,7 @@
     <div class="prompt-dialog-header">
       <h2 id="aiPromptDialogTitle">AI Prompt</h2>
       <div class="prompt-dialog-actions">
-        <button type="button" id="aiPromptCopyBtn" class="prompt-copy-btn" data-copied="false" aria-label="Copy AI prompt">
+        <button type="button" id="aiPromptCopyBtn" class="prompt-copy-btn btn-primary" data-copied="false" aria-label="Copy AI prompt">
           <span class="prompt-copy-icon" aria-hidden="true">
             <svg class="prompt-copy-icon-clipboard" viewBox="0 0 24 24" focusable="false">
               <rect x="9" y="9" width="11" height="11" rx="2"></rect>
@@ -148,7 +148,7 @@
           </span>
           <span class="prompt-copy-label">Copy</span>
         </button>
-        <button type="button" id="closeAiPromptDialogBtn" class="prompt-close-btn" aria-label="Close prompt">&times;</button>
+        <button type="button" id="closeAiPromptDialogBtn" class="prompt-close-btn btn-icon" aria-label="Close prompt">&times;</button>
       </div>
     </div>
     <div class="prompt-dialog-body">

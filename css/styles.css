@@ -6,6 +6,18 @@
     --muted:#52606d;
     --accent:#0f766e;
     --accent-dark:#0b5f58;
+    --btn-primary-bg:var(--accent);
+    --btn-primary-bg-hover:var(--accent-dark);
+    --btn-primary-text:#fff;
+    --btn-secondary-bg:color-mix(in srgb,var(--accent) 10%,white);
+    --btn-secondary-bg-hover:color-mix(in srgb,var(--accent) 17%,white);
+    --btn-secondary-text:var(--accent-dark);
+    --btn-secondary-border:color-mix(in srgb,var(--accent) 25%,white);
+    --btn-icon-bg:#fff;
+    --btn-icon-bg-hover:color-mix(in srgb,var(--accent) 10%,white);
+    --btn-icon-text:#64748b;
+    --btn-icon-border:#d0d7de;
+    --btn-disabled-opacity:.5;
     --shadow:0 16px 40px rgba(15,23,42,.12)
 }
 
@@ -120,16 +132,15 @@ h1 {
 
 button {
     width:100%;
-    border:1px solid #d8dee9;
+    border:1px solid transparent;
     border-radius:10px;
     padding:10px 12px;
     font-size:.95rem;
-    background:var(--accent);
-    color:#fff;
-    border-color:transparent;
+    background:var(--btn-primary-bg);
+    color:var(--btn-primary-text);
     font-weight:600;
     cursor:pointer;
-    transition:background-color 160ms ease,color 160ms ease;
+    transition:background-color 160ms ease,color 160ms ease,border-color 160ms ease;
     appearance:none;
     -webkit-appearance:none;
     -webkit-tap-highlight-color:transparent;
@@ -137,12 +148,67 @@ button {
 }
 
 button:active:not(:disabled) {
-    background:var(--accent-dark)
+    background:var(--btn-primary-bg-hover)
+}
+
+.btn-primary {
+    background:var(--btn-primary-bg);
+    color:var(--btn-primary-text);
+    border-color:transparent
+}
+
+.btn-secondary,
+.secondary-action-btn,
+#resetBtn,
+.card-nav {
+    background:var(--btn-secondary-bg);
+    color:var(--btn-secondary-text);
+    border:1px solid var(--btn-secondary-border);
+    text-decoration:none
+}
+
+.btn-secondary:active:not(:disabled),
+.secondary-action-btn:active:not(:disabled),
+#resetBtn:active:not(:disabled),
+.card-nav:active:not(:disabled) {
+    background:var(--btn-secondary-bg-hover);
+    color:var(--btn-secondary-text)
+}
+
+.btn-icon,
+.dialog-close-btn,
+.prompt-close-btn {
+    background:var(--btn-icon-bg);
+    color:var(--btn-icon-text);
+    border:1px solid var(--btn-icon-border)
+}
+
+.btn-icon:active:not(:disabled),
+.dialog-close-btn:active:not(:disabled),
+.prompt-close-btn:active:not(:disabled) {
+    background:var(--btn-icon-bg-hover);
+    color:var(--accent-dark)
+}
+
+.btn-secondary:focus-visible:not(:disabled),
+.secondary-action-btn:focus-visible:not(:disabled),
+#resetBtn:focus-visible:not(:disabled),
+.card-nav:focus-visible:not(:disabled) {
+    background:var(--btn-secondary-bg-hover);
+    color:var(--accent-dark)
+}
+
+.btn-icon:focus-visible:not(:disabled),
+.dialog-close-btn:focus-visible:not(:disabled),
+.prompt-close-btn:focus-visible:not(:disabled) {
+    background:var(--btn-icon-bg-hover);
+    color:var(--accent-dark);
+    border-color:color-mix(in srgb,var(--accent) 25%,white)
 }
 
 @media (any-hover: hover) {
     button:hover:not(:disabled) {
-        background: var(--accent-dark);
+        background:var(--btn-primary-bg-hover);
     }
 
     .mode-segment:hover:not(:disabled):not(.is-active) {
@@ -171,47 +237,34 @@ button:active:not(:disabled) {
         background: rgba(254,220,220,.95);
     }
 
-    .upload-btn:hover:not(:disabled) {
-        background: color-mix(in srgb, var(--accent) 20%, white);
-        color: var(--accent-dark);
-    }
-
+    .btn-secondary:hover:not(:disabled),
+    .secondary-action-btn:hover:not(:disabled),
+    #resetBtn:hover:not(:disabled),
     .card-nav:hover:not(:disabled) {
-        background:color-mix(in srgb,var(--accent) 10%,white);
+        background:var(--btn-secondary-bg-hover);
         color:var(--accent-dark)
     }
 
-    #resetBtn:hover:not(:disabled) {
-        background:transparent;
+    .btn-icon:hover:not(:disabled),
+    .dialog-close-btn:hover:not(:disabled),
+    .prompt-close-btn:hover:not(:disabled) {
+        background:var(--btn-icon-bg-hover);
         color:var(--accent-dark);
-        text-decoration:underline
-    }
-
-    .secondary-action-btn:hover:not(:disabled),
-    .secondary-action-btn:focus-visible:not(:disabled) {
-        background:var(--accent-dark);
-        color:#fff;
-        border-color:var(--accent-dark)
+        border-color:color-mix(in srgb,var(--accent) 25%,white)
     }
 
     .prompt-copy-btn:hover:not(:disabled),
     .prompt-copy-btn:focus-visible:not(:disabled) {
-        background:var(--accent-dark);
+        background:var(--btn-primary-bg-hover);
         color:#fff;
         text-decoration:none;
-        border-color:var(--accent-dark)
-    }
-
-    .prompt-close-btn:hover,
-    .prompt-close-btn:focus-visible {
-        background:#fff;
-        color:var(--muted)
+        border-color:transparent
     }
 }
 
 button:disabled,input:disabled+span {
     cursor:not-allowed;
-    opacity:.5
+    opacity:var(--btn-disabled-opacity)
 }
 
 [hidden] {
@@ -633,9 +686,6 @@ p.empty-ai-gap {
     height:min(260px,80%);
     padding:0;
     border-radius:999px;
-    border:none;
-    background:transparent;
-    color:var(--text);
     display:inline-flex;
     align-items:center;
     justify-content:center;
@@ -658,14 +708,9 @@ p.empty-ai-gap {
     display:contents;
 }
 
-.card-nav:active:not(:disabled),.card-nav:focus-visible {
-    background:color-mix(in srgb,var(--accent) 10%,white);
-    color:var(--accent-dark)
-}
-
 .card-nav:disabled {
     cursor:not-allowed;
-    opacity:.5
+    opacity:var(--btn-disabled-opacity)
 }
 
 .card-nav:focus-visible,input[type=file]:focus-visible,input[type=checkbox]:focus-visible,button:focus-visible {
@@ -680,20 +725,11 @@ p.empty-ai-gap {
     align-items:center;
     justify-content:center;
     gap:6px;
-    background:transparent;
-    border:1px solid rgba(15,23,42,.15);
-    color:var(--muted);
     padding:6px 10px
 }
 
 #resetBtn .reset-label {
     display:inline
-}
-
-#resetBtn:active:not(:disabled) {
-    background:transparent;
-    color:var(--accent-dark);
-    text-decoration:underline
 }
 
 .app-footer {
@@ -803,7 +839,7 @@ p.empty-ai-gap {
 }
 
 .dialog-close-btn:disabled {
-    opacity:.4;
+    opacity:var(--btn-disabled-opacity);
     cursor:not-allowed
 }
 
@@ -858,10 +894,7 @@ p.empty-ai-gap {
 .secondary-action-btn {
     width:auto;
     margin-top:10px;
-    padding:8px 12px;
-    border:1px solid rgba(15,23,42,.2);
-    background:color-mix(in srgb,var(--accent) 10%,white);
-    color:var(--accent-dark)
+    padding:8px 12px
 }
 
 .ai-csv-builder {
@@ -984,8 +1017,8 @@ p.empty-ai-gap {
 }
 
 .prompt-copy-btn:disabled {
-    cursor:wait;
-    opacity:.85
+    cursor:not-allowed;
+    opacity:var(--btn-disabled-opacity)
 }
 
 .prompt-copy-icon {
@@ -1143,8 +1176,6 @@ p.empty-ai-gap {
         height:48px;
         max-width:none;
         border-radius:50%;
-        border:1px solid rgba(15,23,42,.1);
-        background:color-mix(in srgb,var(--panel) 85%,transparent);
         font-size:1.2rem;
     }
 

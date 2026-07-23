@@ -384,8 +384,8 @@ th {
 }
 
 .prompt-copy-btn:disabled {
-  cursor: wait;
-  opacity: .85;
+  cursor: not-allowed;
+  opacity: .5;
 }
 
 .prompt-copy-btn:hover,
@@ -456,6 +456,18 @@ th {
   font-size: 1.3rem;
   line-height: 1;
   cursor: pointer;
+}
+
+.prompt-close-btn:hover,
+.prompt-close-btn:focus {
+  background: color-mix(in srgb, var(--accent) 10%, white);
+  color: var(--accent-dark);
+  border-color: color-mix(in srgb, var(--accent) 25%, white);
+}
+
+.prompt-close-btn:disabled {
+  cursor: not-allowed;
+  opacity: .5;
 }
 
 .prompt-dialog-body {
