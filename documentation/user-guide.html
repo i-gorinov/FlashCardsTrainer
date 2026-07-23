@@ -16,7 +16,6 @@
         Learn how to prepare CSV files, upload flashcards, review cards, use multi-choice mode, and generate compatible CSV files with AI.
       </p>
     </header>
-
     <nav class="toc" aria-label="Table of contents">
       <h2>Contents</h2>
       <ol>
@@ -31,7 +30,6 @@
         <li><a href="#faq">FAQ</a></li>
       </ol>
     </nav>
-
     <section id="overview" class="guide-section">
       <h2>Overview</h2>
       <p>
@@ -41,17 +39,14 @@
         Each card has a flashcard question and answer. Cards can also include an optional topic and optional multiple-choice content for MC practice.
       </p>
     </section>
-
     <section id="csv-format" class="guide-section">
       <h2>CSV file format</h2>
       <p>
-        Your CSV file must include a header row and at least one data row. The required columns are <code>Question</code> and <code>Answer</code>. All other supported columns are optional.
+        Your CSV file must include a header row and at least one data row. <code>Question</code> and <code>Answer</code> are required; <code>Topic</code> is optional. Multi-choice mode is available when the header includes <code>MC-Question</code>, <code>MC-Answer</code>, and at least one <code>MC-Distractor-*</code> column. Additional distractor columns are optional.
       </p>
-
       <h3>Supported header layout</h3>
       <p>Use this header layout for best compatibility:</p>
       <pre><code>Topic,Question,Answer,MC-Question,MC-Answer,MC-Distractor-1,MC-Distractor-2,MC-Distractor-3</code></pre>
-
       <h3>Required columns</h3>
       <dl class="definition-list">
         <div>
@@ -63,7 +58,6 @@
           <dd>The flashcard answer shown on the back of the card.</dd>
         </div>
       </dl>
-
       <h3>Optional columns</h3>
       <dl class="definition-list">
         <div>
@@ -72,28 +66,25 @@
         </div>
         <div>
           <dt><code>MC-Question</code></dt>
-          <dd>The multiple-choice question shown on the front when multi-choice mode is active. Required together with MC-Answer and at least one distractor to enable multi-choice for this card.</dd>
+          <dd>The multiple-choice question shown on the front when Multi-choice mode is active. To enable Multi-choice mode, the CSV header must include this column, <code>MC-Answer</code>, and at least one <code>MC-Distractor-*</code> column.</dd>
         </div>
         <div>
           <dt><code>MC-Answer</code></dt>
-          <dd>The correct answer used in multi-choice mode. Required together with at least one distractor to enable multi-choice for this card.</dd>
+          <dd>The correct answer used in Multi-choice mode. This column is required only when the deck is intended to support Multi-choice mode.</dd>
         </div>
         <div>
           <dt><code>MC-Distractor-1</code>, <code>MC-Distractor-2</code>, <code>MC-Distractor-3</code></dt>
-          <dd>Incorrect answer options used in multi-choice mode. At least one is required to enable multi-choice for this card.</dd>
+          <dd>Incorrect answer options used in Multi-choice mode. At least one distractor column must be present in the header to enable Multi-choice mode. Additional distractor columns are optional.</dd>
         </div>
       </dl>
-
       <h3>Example</h3>
       <pre><code>"Topic","Question","Answer","MC-Question","MC-Answer","MC-Distractor-1","MC-Distractor-2","MC-Distractor-3"
 "Web","What is HTML?","A markup language for web pages","Which technology defines the structure of a web page?","HTML","CSS","JavaScript","SQL"
 "Web","What is CSS?","A stylesheet language","Which language controls the visual style of a web page?","CSS","HTML","JavaScript","Python"</code></pre>
-
       <p class="note">
-        Column names are not case-sensitive. Empty rows are ignored. Rows without both <code>Question</code> and <code>Answer</code> are skipped. Multiple-choice values are optional per row, and a row becomes MC-capable only when <code>MC-Question</code>, <code>MC-Answer</code>, and at least one <code>MC-Distractor</code> column are non-empty.
+        Column names are not case-sensitive. Empty rows are ignored. Rows without both <code>Question</code> and <code>Answer</code> are skipped. A deck can contain both standard flashcards and cards with Multi-choice content.
       </p>
     </section>
-
     <section id="uploading" class="guide-section">
       <h2>Uploading a CSV file</h2>
       <ol class="steps">
@@ -103,7 +94,6 @@
         <li>If the file cannot be read, check that it includes the required <code>Question</code> and <code>Answer</code> columns.</li>
       </ol>
     </section>
-
     <section id="reviewing" class="guide-section">
       <h2>Reviewing flashcards</h2>
       <p>
@@ -121,7 +111,6 @@
         The status line shows your current position, the number of correct and incorrect answers, and your current score.
       </p>
     </section>
-
     <section id="navigation-filters" class="guide-section">
       <h2>Navigation filters</h2>
       <p>
@@ -136,23 +125,20 @@
         At least one status group must remain visible, so the app prevents all three groups from being hidden at the same time.
       </p>
     </section>
-
     <section id="multi-choice" class="guide-section">
       <h2>Multi-choice mode</h2>
       <p>
-        Flashcard and Multi-choice are separate study modes. Flashcard mode studies all imported rows. Multi-choice mode becomes available when the CSV header includes <code>MC-Question</code>, <code>MC-Answer</code>, and at least one <code>MC-Distractor</code> column. When Multi-choice mode is enabled, only MC-capable rows are shown.
+        Flashcard and Multi-choice are separate study modes. Flashcard mode studies all imported rows. Multi-choice mode becomes available when the CSV header includes <code>MC-Question</code>, <code>MC-Answer</code>, and at least one <code>MC-Distractor-*</code> column. The distractor columns do not all need to be present; one is sufficient. When Multi-choice mode is enabled, only MC-capable rows are shown.
       </p>
       <p>
         The front of each MC card shows <code>MC-Question</code> followed by the correct MC answer mixed with distractors in random order. The back shows the correct option only. Distractors should be plausible but clearly incorrect for the specific question.
       </p>
     </section>
-
     <section id="ai-generation" class="guide-section">
       <h2>Generating CSV files with AI</h2>
       <p>
         Flashcard Trainer includes an integrated AI-powered workflow to create CSV files directly from training material. You can access this from the empty card state or the User Guide.
       </p>
-
       <h3>Quick start: From the empty card</h3>
       <p>When no deck is loaded, the empty card shows two quick links:</p>
       <ul>
@@ -164,15 +150,12 @@
         <li>Click <strong>Generate one with AI</strong> to open the <strong>Create a Deck with AI</strong> dialog.</li>
         <li>Follow the three-step workflow to create and save a new CSV file.</li>
       </ol>
-
       <h3>Three-step workflow</h3>
-
       <h4>Step 1: Open the AI Prompt</h4>
       <p>Click <strong>Open AI Prompt</strong> to view the prompt template that guides your AI assistant.</p>
       <ul>
         <li>Copy the prompt text directly into your AI chat.</li>
       </ul>
-
       <h4>Step 2: Generate CSV output</h4>
       <ol class="steps">
         <li>Paste the AI prompt into your AI assistant.</li>
@@ -181,7 +164,6 @@
         <li>Submit the prompt to the AI assistant.</li>
         <li>Copy the CSV output from the AI assistant.</li>
       </ol>
-
       <h4>Step 3: Create and save a CSV file</h4>
       <ol class="steps">
         <li>Return to the dialog if needed.</li>
@@ -191,7 +173,6 @@
         <li>The file downloads to your device.</li>
         <li>Upload the file using the <strong>Upload CSV</strong> button to start studying.</li>
       </ol>
-
       <h3>Source material</h3>
       <p>You can provide:</p>
       <ul>
@@ -199,11 +180,9 @@
         <li>One or more URLs containing the training material.</li>
         <li>A combination of pasted text and URLs.</li>
       </ul>
-
       <p class="note">
         For URLs, use links to the actual training material pages. A general homepage or landing page is unlikely to produce useful results because the prompt does not ask the AI to recursively crawl an entire website.
       </p>
-
       <h3>Accessing the AI prompt from the User Guide</h3>
       <p>
         You can also view and copy the AI prompt directly from this guide:
@@ -212,27 +191,25 @@
         <button type="button" class="download-link" id="openPromptBtn">View AI prompt</button>
       </p>
     </section>
-
     <section id="notes-limitations" class="guide-section">
       <h2>Notes &amp; limitations</h2>
-
       <h3>CSV content</h3>
       <ul>
         <li>The app expects a CSV file with a header row.</li>
         <li>The <code>Question</code> and <code>Answer</code> columns are required.</li>
-        <li><code>Topic</code>, <code>MC-Question</code>, <code>MC-Answer</code>, and <code>MC-Distractor-1/2/3</code> are optional.</li>
+        <li><code>Topic</code> is optional.</li>
+        <li>Multiple-choice support is optional, but requires <code>MC-Question</code>, <code>MC-Answer</code>, and at least one <code>MC-Distractor-*</code> column in the header.</li>
+        <li>Additional distractor columns are optional.</li>
         <li>Cards with a missing Question or Answer are ignored.</li>
         <li>A deck can mix flashcard-only rows with flashcard-plus-MC rows.</li>
         <li>Very large files may take longer to process in the browser.</li>
       </ul>
-
       <h3>AI-generated CSV files</h3>
       <ul>
         <li>The quality of generated flashcards depends on the quality and completeness of the source material supplied to the AI.</li>
         <li>Different AI assistants may produce different results from the same prompt.</li>
         <li>Review AI-generated flashcards before using them for study or assessment.</li>
       </ul>
-
       <h3>URL limitations</h3>
       <ul>
         <li>Use URLs that point directly to the relevant training content.</li>
@@ -242,45 +219,36 @@
         <li>Some AI assistants may be unable to access URLs that require authentication, subscriptions, VPN access, or organisational permissions.</li>
       </ul>
     </section>
-
     <section id="faq" class="guide-section faq-section">
       <h2>FAQ</h2>
-
       <details>
         <summary>What CSV columns are required?</summary>
-        <p>The required columns are <code>Question</code> and <code>Answer</code>. You can also include <code>Topic</code>, <code>MC-Question</code>, <code>MC-Answer</code>, and <code>MC-Distractor-1/2/3</code>. Flashcard fields are mandatory; MC fields are optional per row.</p>
+        <p>The required columns are <code>Question</code> and <code>Answer</code>. <code>Topic</code> is optional. Multiple-choice support is optional, but if used the header must contain <code>MC-Question</code>, <code>MC-Answer</code>, and at least one <code>MC-Distractor-*</code> column.</p>
       </details>
-
       <details>
         <summary>Do column names have to use exact capitalisation?</summary>
         <p>No. Column names are matched without case sensitivity, so <code>Question</code>, <code>question</code>, and <code>QUESTION</code> are treated the same.</p>
       </details>
-
       <details>
         <summary>How do I create a CSV file using AI?</summary>
         <p>From the empty card, click the "Generate one with AI" link. Alternatively, you can access the AI Deck Creator from the User Guide. Follow the three-step workflow: open the AI prompt, paste it into your AI assistant with your training material, then paste the generated CSV into the File Creator and save it.</p>
       </details>
-
       <details>
         <summary>What source material can I provide to the AI?</summary>
         <p>You can provide pasted training text, one or more URLs, or a combination of both.</p>
       </details>
-
       <details>
         <summary>Can I provide multiple URLs?</summary>
         <p>Yes. Use multiple URLs when the training material is spread across several specific pages.</p>
       </details>
-
       <details>
         <summary>Can I provide only a website homepage?</summary>
         <p>No. For best results, provide URLs for the actual training material pages. The prompt does not ask the AI to recursively crawl an entire website from a homepage.</p>
       </details>
-
       <details>
         <summary>Why did the AI generate poor or incomplete results?</summary>
         <p>The source material may be incomplete, the URLs may be inaccessible, or the URLs may point to general navigation pages rather than actual training content.</p>
       </details>
-
       <details>
         <summary>Should I review AI-generated flashcards?</summary>
         <p>Yes. Review AI-generated flashcards before using them, especially if the material is important or used for assessment.</p>
@@ -323,7 +291,6 @@
       const promptUrl = "../ai-prompts/FlashcardTrainer_prompt.txt";
       let promptContent = "";
       let copiedStateTimeoutId = 0;
-
       function getAppViewportWidth() {
         try {
           return window.top.innerWidth;
@@ -331,43 +298,34 @@
           return window.innerWidth;
         }
       }
-
       function updatePromptViewportMode() {
         const viewportWidth = getAppViewportWidth();
         document.body.dataset.appViewport = viewportWidth <= MOBILE_VIEWPORT_MAX_WIDTH ? "mobile" : "desktop";
       }
-
       async function ensurePromptLoaded() {
         if (promptContent) {
           promptText.textContent = promptContent;
           return promptContent;
         }
-
         promptText.textContent = "Loading...";
-
         const response = await fetch(promptUrl);
-
         if (!response.ok) {
           throw new Error("Failed to load AI prompt file.");
         }
-
         promptContent = (await response.text()).trim();
         promptText.textContent = promptContent;
         return promptContent;
       }
-
       function clearCopiedState() {
         if (copiedStateTimeoutId) {
           window.clearTimeout(copiedStateTimeoutId);
           copiedStateTimeoutId = 0;
         }
-
         copyBtn.dataset.copied = "false";
         copyBtn.setAttribute("aria-label", "Copy AI prompt");
         copyBtn.querySelector(".prompt-copy-label").textContent = "Copy";
         copyStatus.textContent = "";
       }
-
       function showCopiedState() {
         clearCopiedState();
         copyBtn.dataset.copied = "true";
@@ -376,27 +334,21 @@
         copyStatus.textContent = "AI prompt copied to clipboard.";
         copiedStateTimeoutId = window.setTimeout(clearCopiedState, 2000);
       }
-
       async function openPromptDialog() {
         if (!dialog.open) {
           dialog.showModal();
         }
-
         if (window.parent !== window) {
           window.parent.postMessage({ type: "flashcardPromptDialogOpened" }, "*");
         }
-
         try {
           await ensurePromptLoaded();
         } catch (error) {
           promptText.textContent = "Unable to load the AI prompt file. Serve the site through Live Server or another static server and try again.";
         }
       }
-
       updatePromptViewportMode();
-
       window.addEventListener("resize", updatePromptViewportMode);
-
       try {
         if (window.top !== window) {
           window.top.addEventListener("resize", updatePromptViewportMode);
@@ -404,9 +356,7 @@
       } catch (error) {
         // Ignore cross-window access issues and fall back to the local viewport.
       }
-
       openBtn.addEventListener("click", openPromptDialog);
-
       window.addEventListener("message", function (event) {
         if (event.data && event.data.type === "flashcardOpenPromptDialog") {
           openPromptDialog();
@@ -415,10 +365,8 @@
           if (section) section.scrollIntoView({ behavior: "instant", block: "start" });
         }
       });
-
       copyBtn.addEventListener("click", async function () {
         copyBtn.disabled = true;
-
         try {
           const content = await ensurePromptLoaded();
           await navigator.clipboard.writeText(content);
@@ -429,20 +377,16 @@
           copyBtn.disabled = false;
         }
       });
-
       closeBtn.addEventListener("click", function () {
         clearCopiedState();
         dialog.close();
       });
-
       dialog.addEventListener("close", function () {
         clearCopiedState();
-
         if (window.parent !== window) {
           window.parent.postMessage({ type: "flashcardPromptDialogClosed" }, "*");
         }
       });
-
       dialog.addEventListener("click", function (event) {
         if (event.target === dialog) {
           dialog.close();
