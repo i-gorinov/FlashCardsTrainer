@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.2] - 2026-07-24
+
+### Changed
+- Updated empty-state wording to clarify that users should upload a flashcard deck (`.csv`) to start.
+- Updated the AI deck discovery action label from "Generate one with AI" to "Generate one with the AI prompt" for clearer guidance.
+- Expanded shared AI prompt instructions to assign Topics, group cards by Topic, and output rows sorted by Topic (A-Z).
+
 ## [1.5.1] - 2026-07-23
 
 ### Changed

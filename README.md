@@ -44,7 +44,7 @@ Cancelling the dialog leaves the current session completely unchanged.
 
 ### AI Deck Quick Start
 
-When no deck is loaded, the empty card view shows a coherent empty state with three elements in order: "Upload a CSV file to begin.", a "View CSV format requirements" link that opens the User Guide directly at the CSV file format section, and "Don't have a deck yet? Generate one with AI."
+When no deck is loaded, the empty card view shows a coherent empty state with three elements in order: "Upload a flashcard deck (.csv) to begin", a "View CSV format requirements" link that opens the User Guide directly at the CSV file format section, and "Don't have a deck yet? Generate one with the AI prompt."
 
 The AI deck dialog provides:
 
@@ -62,6 +62,7 @@ The AI prompt uses the same shared prompt source and preserves responsive behavi
 
 - Desktop and tablet: Copy option remains available.
 - Mobile: Copy option only.
+- Prompt output guidance assigns a Topic per card, then groups and sorts rows by Topic (A-Z).
 - Prompt content loads from `ai-prompts/FlashcardTrainer_prompt.txt`.
 
 ## CSV Format
